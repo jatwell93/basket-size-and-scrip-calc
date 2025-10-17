@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy Growth Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .calculator-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+        }
+        .yellow-input {
+            background-color: #fef3c7;
+            border-color: #fbbf24;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            width: 100%;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid #e5e7eb;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+        .results-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .results-table td {
+            color: #4b5563;
+        }
+        .results-table td.number {
+            text-align: right;
+        }
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background-color: #e5e7eb;
+            color: #4b5563;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-radius: 8px 8px 0 0;
+            margin-right: 0.25rem;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            background-color: #2563eb;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Pharmacy Growth Calculator</h1>
+            <p class="text-gray-600 mt-2">Estimate potential growth from basket size increases and script solutions</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="mb-4">
+            <button class="tab-button active" onclick="switchTab('basket')">Basket Size Growth</button>
+            <button class="tab-button" onclick="switchTab('script')">Script Solutions Growth</button>
+        </div>
+
+        <!-- Basket Size Calculator Tab -->
+        <div id="basket-tab" class="tab-content active">
+            <div class="calculator-card">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Current Weekly Store Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Weekly Transactions:</label>
+                        <input type="number" id="numTransactions" class="input-field yellow-input" placeholder="e.g., 10000" value="10000">
+                        <p id="error-numTransactions" class="error-message"></p>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Current Avg. Basket ($):</label>
+                        <input type="number" id="currentAvgBasket" class="input-field yellow-input" placeholder="e.g., 28.58" value="28.58" step="0.01">
+                        <p id="error-currentAvgBasket" class="error-message"></p>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Current GP %:</label>
+                        <input type="number" id="currentGpPercentage" class="input-field yellow-input" placeholder="e.g., 34" value="34" step="0.01">
+                        <p id="error-currentGpPercentage" class="error-message"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-card">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Growth Scenarios</h2>
+                <button onclick="calculateBasketGrowth()" class="btn-primary mb-4">Calculate Growth Potential</button>
+                
+                <div id="basketResults" style="display: none;">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Current Performance:</h3>
+                        <p class="mb-2">Weekly Sales: <span id="currentWeeklySales" class="font-bold"></span></p>
+                        <p>Weekly Profit: <span id="currentWeeklyProfit" class="font-bold"></span></p>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Incremental Growth from Basket Size Increases:</h3>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Basket Increase</th>
+                                <th>Weekly</th>
+                                <th>Monthly (4 weeks)</th>
+                                <th>Yearly (52 weeks)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="basketIncrementTable"></tbody>
+                    </table>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mt-6">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">Custom Target</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block font-medium text-gray-700 mb-2">Target Avg. Basket ($):</label>
+                                <input type="number" id="targetAvgBasket" class="input-field yellow-input" placeholder="e.g., 29.58" value="29.58" step="0.01">
+                            </div>
+                            <div>
+                                <label class="block font-medium text-gray-700 mb-2">Target GP %:</label>
+                                <input type="number" id="targetGpPercentage" class="input-field yellow-input" placeholder="e.g., 35" value="35" step="0.01">
+                            </div>
+                        </div>
+                        <button onclick="calculateCustomBasket()" class="btn-primary">Calculate Custom Target</button>
+                        
+                        <div id="customBasketResults" style="display: none;" class="mt-4">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Incremental Sales</th>
+                                        <th>Incremental Profit</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customBasketTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Script Solutions Calculator Tab -->
+        <div id="script-tab" class="tab-content">
+            <div class="calculator-card">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Script Transaction Details</h2>
+                <p class="text-sm text-gray-600 mb-4">Calculate incremental sales from attaching OTC products to script transactions (avoiding "naked scripts")</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Scripts Per Day:</label>
+                        <input type="number" id="scriptsPerDay" class="input-field yellow-input" placeholder="e.g., 100" value="100">
+                        <p id="error-scriptsPerDay" class="error-message"></p>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Days Per Week:</label>
+                        <input type="number" id="daysPerWeek" class="input-field yellow-input" placeholder="e.g., 7" value="7">
+                        <p id="error-daysPerWeek" class="error-message"></p>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-700 mb-2">Avg. OTC Product Value ($):</label>
+                        <input type="number" id="avgOtcValue" class="input-field yellow-input" placeholder="e.g., 17" value="17" step="0.01">
+                        <p id="error-avgOtcValue" class="error-message"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="calculator-card">
+                <h2 class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3">Conversion Rate Scenarios</h2>
+                <button onclick="calculateScriptGrowth()" class="btn-primary mb-4">Calculate Script Solutions Growth</button>
+                
+                <div id="scriptResults" style="display: none;">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-3">Script Volume:</h3>
+                        <p class="mb-2">Scripts Per Week: <span id="scriptsPerWeek" class="font-bold"></span></p>
+                        <p class="mb-2">Scripts Per Month: <span id="scriptsPerMonth" class="font-bold"></span></p>
+                        <p>Scripts Per Year: <span id="scriptsPerYear" class="font-bold"></span></p>
+                    </div>
+
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3">Incremental Sales from Script + OTC Attachment:</h3>
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Conversion Rate</th>
+                                <th>Weekly</th>
+                                <th>Monthly (4 weeks)</th>
+                                <th>Yearly (52 weeks)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scriptConversionTable"></tbody>
+                    </table>
+
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mt-6">
+                        <h3 class="text-xl font-semibold text-green-800 mb-4">Custom Conversion Target</h3>
+                        <div class="max-w-xs mb-4">
+                            <label class="block font-medium text-gray-700 mb-2">Target Conversion Rate (%):</label>
+                            <input type="number" id="targetConversion" class="input-field yellow-input" placeholder="e.g., 5" value="5" step="0.1">
+                        </div>
+                        <button onclick="calculateCustomScript()" class="btn-primary">Calculate Custom Target</button>
+                        
+                        <div id="customScriptResults" style="display: none;" class="mt-4">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Period</th>
+                                        <th>Additional Sales</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customScriptTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
+            <h3 class="font-bold mb-2">Disclaimer:</h3>
+            <ul class="list-disc pl-5 space-y-1">
+                <li>This is a resource tool, not a financial calculator.</li>
+                <li>It is an estimator and cannot be used to track sales or uplift in sales.</li>
+                <li>Please use this as indicative and contact your Pharmacy Business Leader if you require support or guidance on using these forecasting resources.</li>
+                <li>The Script Solutions Growth Calculator uses the average OTC product value you specify (default $17).</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tab) {
+            const basketTab = document.getElementById('basket-tab');
+            const scriptTab = document.getElementById('script-tab');
+            const buttons = document.querySelectorAll('.tab-button');
+            
+            if (tab === 'basket') {
+                basketTab.classList.add('active');
+                scriptTab.classList.remove('active');
+                buttons[0].classList.add('active');
+                buttons[1].classList.remove('active');
+            } else {
+                basketTab.classList.remove('active');
+                scriptTab.classList.add('active');
+                buttons[0].classList.remove('active');
+                buttons[1].classList.add('active');
+            }
+        }
+
+        // Format currency
+        function formatCurrency(value) {
+            return value.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+        }
+
+        // Validate input
+        function validateInput(value, min = 0) {
+            const num = parseFloat(value);
+            return !isNaN(num) && num >= min;
+        }
+
+        // BASKET SIZE CALCULATOR
+        function calculateBasketGrowth() {
+            // Clear errors
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            const numTransactions = parseFloat(document.getElementById('numTransactions').value);
+            const currentAvgBasket = parseFloat(document.getElementById('currentAvgBasket').value);
+            const currentGpPercent = parseFloat(document.getElementById('currentGpPercentage').value) / 100;
+
+            // Validate
+            if (!validateInput(numTransactions, 1)) {
+                document.getElementById('error-numTransactions').textContent = 'Please enter a valid number of transactions';
+                return;
+            }
+            if (!validateInput(currentAvgBasket, 0.01)) {
+                document.getElementById('error-currentAvgBasket').textContent = 'Please enter a valid basket value';
+                return;
+            }
+            if (!validateInput(currentGpPercent * 100, 0)) {
+                document.getElementById('error-currentGpPercentage').textContent = 'Please enter a valid GP percentage';
+                return;
+            }
+
+            // Calculate current performance
+            const currentWeeklySales = numTransactions * currentAvgBasket;
+            const currentWeeklyProfit = currentWeeklySales * currentGpPercent;
+
+            document.getElementById('currentWeeklySales').textContent = formatCurrency(currentWeeklySales);
+            document.getElementById('currentWeeklyProfit').textContent = formatCurrency(currentWeeklyProfit);
+
+            // Calculate incremental scenarios
+            const increments = [1, 1.50, 2, 2.50, 3];
+            const tbody = document.getElementById('basketIncrementTable');
+            tbody.innerHTML = '';
+
+            increments.forEach(increment => {
+                const weeklyIncrease = numTransactions * increment;
+                const monthlyIncrease = weeklyIncrease * 4;
+                const yearlyIncrease = weeklyIncrease * 52;
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="font-medium">+${formatCurrency(increment)}</td>
+                    <td class="number">${formatCurrency(weeklyIncrease)}</td>
+                    <td class="number">${formatCurrency(monthlyIncrease)}</td>
+                    <td class="number">${formatCurrency(yearlyIncrease)}</td>
+                `;
+            });
+
+            document.getElementById('basketResults').style.display = 'block';
+        }
+
+        function calculateCustomBasket() {
+            const numTransactions = parseFloat(document.getElementById('numTransactions').value);
+            const currentAvgBasket = parseFloat(document.getElementById('currentAvgBasket').value);
+            const currentGpPercent = parseFloat(document.getElementById('currentGpPercentage').value) / 100;
+            const targetAvgBasket = parseFloat(document.getElementById('targetAvgBasket').value);
+            const targetGpPercent = parseFloat(document.getElementById('targetGpPercentage').value) / 100;
+
+            if (!validateInput(targetAvgBasket, 0)) {
+                alert('Please enter a valid target basket value');
+                return;
+            }
+            if (!validateInput(targetGpPercent * 100, 0)) {
+                alert('Please enter a valid target GP percentage');
+                return;
+            }
+
+            // Calculate current and target figures
+            const currentWeeklySales = numTransactions * currentAvgBasket;
+            const currentWeeklyProfit = currentWeeklySales * currentGpPercent;
+            const targetWeeklySales = numTransactions * targetAvgBasket;
+            const targetWeeklyProfit = targetWeeklySales * targetGpPercent;
+
+            const weeklyIncrementalSales = targetWeeklySales - currentWeeklySales;
+            const weeklyIncrementalProfit = targetWeeklyProfit - currentWeeklyProfit;
+
+            const tbody = document.getElementById('customBasketTable');
+            tbody.innerHTML = '';
+
+            const periods = [
+                { name: 'Weekly', multiplier: 1 },
+                { name: 'Monthly (4 weeks)', multiplier: 4 },
+                { name: 'Yearly (52 weeks)', multiplier: 52 }
+            ];
+
+            periods.forEach(period => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="font-medium">${period.name}</td>
+                    <td class="number">${formatCurrency(weeklyIncrementalSales * period.multiplier)}</td>
+                    <td class="number">${formatCurrency(weeklyIncrementalProfit * period.multiplier)}</td>
+                `;
+            });
+
+            document.getElementById('customBasketResults').style.display = 'block';
+        }
+
+        // SCRIPT SOLUTIONS CALCULATOR
+        function calculateScriptGrowth() {
+            // Clear errors
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            
+            const scriptsPerDay = parseFloat(document.getElementById('scriptsPerDay').value);
+            const daysPerWeek = parseFloat(document.getElementById('daysPerWeek').value);
+            const avgOtcValue = parseFloat(document.getElementById('avgOtcValue').value);
+
+            // Validate
+            if (!validateInput(scriptsPerDay, 1)) {
+                document.getElementById('error-scriptsPerDay').textContent = 'Please enter a valid number of scripts';
+                return;
+            }
+            if (!validateInput(daysPerWeek, 1)) {
+                document.getElementById('error-daysPerWeek').textContent = 'Please enter a valid number of days';
+                return;
+            }
+            if (!validateInput(avgOtcValue, 0.01)) {
+                document.getElementById('error-avgOtcValue').textContent = 'Please enter a valid OTC value';
+                return;
+            }
+
+            // Calculate script volumes
+            const scriptsPerWeek = scriptsPerDay * daysPerWeek;
+            const scriptsPerMonth = scriptsPerWeek * 4;
+            const scriptsPerYear = scriptsPerWeek * 52;
+
+            document.getElementById('scriptsPerWeek').textContent = scriptsPerWeek.toLocaleString();
+            document.getElementById('scriptsPerMonth').textContent = scriptsPerMonth.toLocaleString();
+            document.getElementById('scriptsPerYear').textContent = scriptsPerYear.toLocaleString();
+
+            // Calculate conversion scenarios
+            const conversionRates = [2, 4, 6, 8, 10];
+            const tbody = document.getElementById('scriptConversionTable');
+            tbody.innerHTML = '';
+
+            conversionRates.forEach(rate => {
+                const weeklyIncrease = scriptsPerWeek * (rate / 100) * avgOtcValue;
+                const monthlyIncrease = weeklyIncrease * 4;
+                const yearlyIncrease = weeklyIncrease * 52;
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="font-medium">${rate}% Conversion</td>
+                    <td class="number">${formatCurrency(weeklyIncrease)}</td>
+                    <td class="number">${formatCurrency(monthlyIncrease)}</td>
+                    <td class="number">${formatCurrency(yearlyIncrease)}</td>
+                `;
+            });
+
+            document.getElementById('scriptResults').style.display = 'block';
+        }
+
+        function calculateCustomScript() {
+            const scriptsPerDay = parseFloat(document.getElementById('scriptsPerDay').value);
+            const daysPerWeek = parseFloat(document.getElementById('daysPerWeek').value);
+            const avgOtcValue = parseFloat(document.getElementById('avgOtcValue').value);
+            const targetConversion = parseFloat(document.getElementById('targetConversion').value);
+
+            if (!validateInput(targetConversion, 0)) {
+                alert('Please enter a valid conversion rate');
+                return;
+            }
+
+            const scriptsPerWeek = scriptsPerDay * daysPerWeek;
+            const weeklyIncrease = scriptsPerWeek * (targetConversion / 100) * avgOtcValue;
+
+            const tbody = document.getElementById('customScriptTable');
+            tbody.innerHTML = '';
+
+            const periods = [
+                { name: 'Weekly', multiplier: 1 },
+                { name: 'Monthly (4 weeks)', multiplier: 4 },
+                { name: 'Yearly (52 weeks)', multiplier: 52 }
+            ];
+
+            periods.forEach(period => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="font-medium">${period.name}</td>
+                    <td class="number">${formatCurrency(weeklyIncrease * period.multiplier)}</td>
+                `;
+            });
+
+            document.getElementById('customScriptResults').style.display = 'block';
+        }
+
+        // Auto-calculate on input change for real-time updates
+        document.getElementById('numTransactions').addEventListener('input', () => {
+            if (document.getElementById('basketResults').style.display === 'block') {
+                calculateBasketGrowth();
+            }
+        });
+        document.getElementById('currentAvgBasket').addEventListener('input', () => {
+            if (document.getElementById('basketResults').style.display === 'block') {
+                calculateBasketGrowth();
+            }
+        });
+        document.getElementById('currentGpPercentage').addEventListener('input', () => {
+            if (document.getElementById('basketResults').style.display === 'block') {
+                calculateBasketGrowth();
+            }
+        });
+
+        document.getElementById('scriptsPerDay').addEventListener('input', () => {
+            if (document.getElementById('scriptResults').style.display === 'block') {
+                calculateScriptGrowth();
+            }
+        });
+        document.getElementById('daysPerWeek').addEventListener('input', () => {
+            if (document.getElementById('scriptResults').style.display === 'block') {
+                calculateScriptGrowth();
+            }
+        });
+        document.getElementById('avgOtcValue').addEventListener('input', () => {
+            if (document.getElementById('scriptResults').style.display === 'block') {
+                calculateScriptGrowth();
+            }
+        });
+    </script>
+</body>
+</html>
