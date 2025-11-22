@@ -372,6 +372,7 @@ function calculateCustomScript() {
     alert("Please enter a valid target percentage");
     return;
   }
+  
 
   // Weekly calculations
   const weeklyProposedTrans = Math.round(
@@ -465,3 +466,30 @@ function calculateCustomScript() {
     }
   });
 });
+
+// Expose functions to window (fallback) and attach event listeners
+if (typeof window !== "undefined") {
+  // Fallback global references (keeps backwards compatibility)
+  window.switchTab = switchTab;
+  window.toggleFaq = toggleFaq;
+  window.calculateBasketGrowth = calculateBasketGrowth;
+  window.calculateCustomBasket = calculateCustomBasket;
+  window.calculateScriptGrowth = calculateScriptGrowth;
+  window.calculateCustomScript = calculateCustomScript;
+
+  // Tab buttons (use data-tab attribute)
+  document.querySelectorAll('.tab-button[data-tab]').forEach((btn) => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  // Calculator buttons
+  document.getElementById('btnCalculateBasket')?.addEventListener('click', calculateBasketGrowth);
+  document.getElementById('btnCalculateCustomBasket')?.addEventListener('click', calculateCustomBasket);
+  document.getElementById('btnCalculateScript')?.addEventListener('click', calculateScriptGrowth);
+  document.getElementById('btnCalculateCustomScript')?.addEventListener('click', calculateCustomScript);
+
+  // FAQ accordion: attach by index order
+  document.querySelectorAll('.faq-question').forEach((q, i) => {
+    q.addEventListener('click', () => toggleFaq(i));
+  });
+}

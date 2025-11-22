@@ -25,13 +25,13 @@
 
             <!-- Tab Navigation -->
             <div class="mb-4">
-                <button class="tab-button active" onclick="switchTab('basket')">
+                <button class="tab-button active" data-tab="basket">
                     Basket Size Growth
                 </button>
-                <button class="tab-button" onclick="switchTab('script')">
+                <button class="tab-button" data-tab="script">
                     Script Solutions Growth
                 </button>
-                <button class="tab-button" onclick="switchTab('faq')">
+                <button class="tab-button" data-tab="faq">
                     FAQ
                 </button>
             </div>
@@ -105,7 +105,7 @@
                         Growth Scenarios
                     </h2>
                     <button
-                        onclick="calculateBasketGrowth()"
+                        id="btnCalculateBasket"
                         class="btn-primary mb-4"
                     >
                         Calculate Growth Potential
@@ -192,7 +192,7 @@
                                 </div>
                             </div>
                             <button
-                                onclick="calculateCustomBasket()"
+                                id="btnCalculateCustomBasket"
                                 class="btn-primary"
                             >
                                 Calculate Custom Target
@@ -306,7 +306,7 @@
                         Script Solutions Growth Calculator
                     </h2>
                     <button
-                        onclick="calculateScriptGrowth()"
+                        id="btnCalculateScript"
                         class="btn-primary mb-4"
                     >
                         Calculate Growth Scenarios
@@ -636,7 +636,7 @@
                                 />
                             </div>
                             <button
-                                onclick="calculateCustomScript()"
+                                id="btnCalculateCustomScript"
                                 class="btn-primary max-w-md"
                             >
                                 Calculate Custom Target
@@ -755,7 +755,7 @@
                     </h2>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(0)">
+                        <div class="faq-question">
                             <span>What is this calculator used for?</span>
                             <span class="faq-arrow">▼</span>
                         </div>
@@ -787,32 +787,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(1)">
-                            <span>Is this a financial calculator?</span>
-                            <span class="faq-arrow">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            <p>
-                                No, this is not an official financial
-                                calculator. It is a resource tool and estimator
-                                that provides indicative projections only.
-                            </p>
-                            <p>
-                                The calculator cannot be used to track actual
-                                sales or measure real uplift in sales. It's
-                                designed for planning and goal-setting purposes
-                                to help visualize what might be achievable with
-                                specific improvements.
-                            </p>
-                            <p>
-                                For official financial analysis or guidance,
-                                please contact your Pharmacy Business Leader.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(2)">
+                        <div class="faq-question">
                             <span
                                 >What are "Script Solutions" or "naked
                                 scripts"?</span
@@ -852,7 +827,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(3)">
+                        <div class="faq-question">
                             <span
                                 >How do I use the Basket Size Growth
                                 Calculator?</span
@@ -893,7 +868,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(4)">
+                        <div class="faq-question">
                             <span
                                 >How do I use the Script Solutions Growth
                                 Calculator?</span
@@ -941,7 +916,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(5)">
+                        <div class="faq-question">
                             <span>What does "Script Solution %" mean?</span>
                             <span class="faq-arrow">▼</span>
                         </div>
@@ -971,7 +946,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(6)">
+                        <div class="faq-question">
                             <span
                                 >Where does the $17 average OTC value come
                                 from?</span
@@ -996,7 +971,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(7)">
+                        <div class="faq-question">
                             <span
                                 >What does GP% mean and why is it
                                 important?</span
@@ -1041,7 +1016,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(8)">
+                        <div class="faq-question">
                             <span
                                 >Can I use this calculator to track my actual
                                 performance?</span
@@ -1067,7 +1042,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(10)">
+                        <div class="faq-question">
                             <span
                                 >What strategies can help me achieve these
                                 growth targets?</span
@@ -1131,7 +1106,7 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFaq(11)">
+                        <div class="faq-question">
                             <span>Who can I contact for help or guidance?</span>
                             <span class="faq-arrow">▼</span>
                         </div>
