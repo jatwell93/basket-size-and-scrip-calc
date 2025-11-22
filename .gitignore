@@ -3,7 +3,7 @@
 
 # Dependency directories
 node_modules/
-
+.zed
 # Environment variables
 .env
 
