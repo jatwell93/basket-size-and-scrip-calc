@@ -9,131 +9,7 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <style>
-            body {
-                font-family: "Inter", sans-serif;
-                background-color: #f3f4f6;
-            }
-            .calculator-card {
-                background-color: white;
-                border-radius: 12px;
-                box-shadow:
-                    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
-                padding: 2rem;
-                margin-bottom: 2rem;
-            }
-            .input-field {
-                width: 100%;
-                padding: 0.75rem 1rem;
-                border: 1px solid #d1d5db;
-                border-radius: 8px;
-                box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-                transition:
-                    border-color 0.2s ease-in-out,
-                    box-shadow 0.2s ease-in-out;
-            }
-            .input-field:focus {
-                outline: none;
-                border-color: #2563eb;
-                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
-            }
-            .yellow-input {
-                background-color: #fef3c7;
-                border-color: #fbbf24;
-            }
-            .btn-primary {
-                background-color: #2563eb;
-                color: white;
-                font-weight: 600;
-                padding: 0.75rem 1.5rem;
-                border-radius: 8px;
-                border: none;
-                cursor: pointer;
-                transition: background-color 0.2s ease-in-out;
-                width: 100%;
-            }
-            .btn-primary:hover {
-                background-color: #1d4ed8;
-            }
-            .results-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 1rem;
-            }
-            .results-table th,
-            .results-table td {
-                border: 1px solid #e5e7eb;
-                padding: 0.75rem 1rem;
-                text-align: left;
-            }
-            .results-table th {
-                background-color: #f9fafb;
-                font-weight: 600;
-                color: #1f2937;
-                font-size: 0.875rem;
-            }
-            .results-table td {
-                color: #4b5563;
-            }
-            .results-table td.number {
-                text-align: right;
-                font-weight: 500;
-            }
-            .error-message {
-                color: #ef4444;
-                font-size: 0.875rem;
-                margin-top: 0.25rem;
-            }
-            .tab-button {
-                padding: 0.75rem 1.5rem;
-                border: none;
-                background-color: #e5e7eb;
-                color: #4b5563;
-                cursor: pointer;
-                transition: all 0.2s;
-                border-radius: 8px 8px 0 0;
-                margin-right: 0.25rem;
-                font-weight: 500;
-            }
-            .tab-button.active {
-                background-color: #2563eb;
-                color: white;
-            }
-            .tab-content {
-                display: none;
-            }
-            .tab-content.active {
-                display: block;
-            }
-            .scenario-section {
-                background-color: #f0f9ff;
-                border: 2px solid #3b82f6;
-                border-radius: 8px;
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-            .scenario-header {
-                font-size: 1.125rem;
-                font-weight: 600;
-                color: #1e40af;
-                margin-bottom: 1rem;
-            }
-            .current-state {
-                background-color: #fef3c7;
-                border: 2px solid #f59e0b;
-                border-radius: 8px;
-                padding: 1.5rem;
-                margin-bottom: 1.5rem;
-            }
-            .target-section {
-                background-color: #d1fae5;
-                border: 2px solid #10b981;
-                border-radius: 8px;
-                padding: 1.5rem;
-                margin-top: 1.5rem;
-            }
-        </style>
+        <link rel="stylesheet" href="styles.css" />
     </head>
     <body class="p-4 md:p-8">
         <div class="max-w-6xl mx-auto">
@@ -154,6 +30,9 @@
                 </button>
                 <button class="tab-button" onclick="switchTab('script')">
                     Script Solutions Growth
+                </button>
+                <button class="tab-button" onclick="switchTab('faq')">
+                    FAQ
                 </button>
             </div>
 
@@ -350,12 +229,13 @@
                     </h2>
                     <p class="text-sm text-gray-600 mb-4">
                         Enter your current script transaction data to calculate
-                        growth potential from attaching OTC products
+                        growth potential from increasing Over The Counter (OTC)
+                        products with your current script.
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div>
                             <label class="block font-medium text-gray-700 mb-2"
-                                >Weekly Trans w/ Script:</label
+                                >Weekly Script Sales:</label
                             >
                             <input
                                 type="number"
@@ -371,13 +251,13 @@
                         </div>
                         <div>
                             <label class="block font-medium text-gray-700 mb-2"
-                                >Trans w/ Script + Other:</label
+                                >Weekly Script + Other:</label
                             >
                             <input
                                 type="number"
                                 id="scriptPlusOther"
                                 class="input-field yellow-input"
-                                placeholder="e.g., 470"
+                                placeholder="e.g. 470 - s3,OTC's, etc."
                                 value="470"
                             />
                             <p
@@ -393,7 +273,7 @@
                                 type="number"
                                 id="avgOtcValue"
                                 class="input-field yellow-input"
-                                placeholder="e.g., 17"
+                                placeholder="e.g. 17"
                                 value="17"
                                 step="0.01"
                             />
@@ -401,7 +281,7 @@
                         </div>
                         <div>
                             <label class="block font-medium text-gray-700 mb-2"
-                                >Current Store GP %:</label
+                                >Current Store OTC GP %:</label
                             >
                             <input
                                 type="number"
@@ -751,7 +631,7 @@
                                     type="number"
                                     id="targetScriptPercent"
                                     class="input-field yellow-input"
-                                    placeholder="e.g., 45"
+                                    placeholder="e.g. 45"
                                     step="0.1"
                                 />
                             </div>
@@ -853,12 +733,426 @@
                             class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4"
                         >
                             <p class="text-sm text-gray-700">
-                                <strong>Please note:</strong> This data is
-                                purely a speculative model on what could be
-                                achieved with the average "other" value
-                                estimated to be $<span id="avgValueNote"></span>
+                                <strong>Please note:</strong> This data is a
+                                speculative model on what could be achieved with
+                                the average "other" value estimated to be $<span
+                                    id="avgValueNote"
+                                ></span>
                                 each
                             </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FAQ Tab -->
+            <div id="faq-tab" class="tab-content">
+                <div class="calculator-card">
+                    <h2
+                        class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3"
+                    >
+                        Frequently Asked Questions
+                    </h2>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(0)">
+                            <span>What is this calculator used for?</span>
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                This calculator is a resource tool designed to
+                                help pharmacy teams visualise and quantify
+                                potential sales and profit growth opportunities.
+                                It focuses on two key strategies:
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>Basket Size Growth:</strong>
+                                    Understanding the financial impact of
+                                    increasing the average transaction value
+                                </li>
+                                <li>
+                                    <strong>Script Solutions Growth:</strong>
+                                    Calculating potential revenue from attaching
+                                    OTC products to prescription transactions
+                                </li>
+                            </ul>
+                            <p>
+                                The tool helps set realistic targets and
+                                demonstrates how small improvements can compound
+                                into significant revenue increases.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(1)">
+                            <span>Is this a financial calculator?</span>
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                No, this is not an official financial
+                                calculator. It is a resource tool and estimator
+                                that provides indicative projections only.
+                            </p>
+                            <p>
+                                The calculator cannot be used to track actual
+                                sales or measure real uplift in sales. It's
+                                designed for planning and goal-setting purposes
+                                to help visualize what might be achievable with
+                                specific improvements.
+                            </p>
+                            <p>
+                                For official financial analysis or guidance,
+                                please contact your Pharmacy Business Leader.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(2)">
+                            <span
+                                >What are "Script Solutions" or "naked
+                                scripts"?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                <strong>Script Solutions</strong> refers to
+                                offering relevant OTC (over-the-counter)
+                                products alongside prescription medications
+                                during the dispensing process.
+                            </p>
+                            <p>
+                                <strong>Naked scripts</strong> are prescription
+                                transactions where the customer purchases only
+                                the prescription medication without any
+                                additional products.
+                            </p>
+                            <p>
+                                By reducing "naked scripts" and increasing
+                                script solutions, pharmacies can:
+                            </p>
+                            <ul>
+                                <li>
+                                    Better serve customer health needs with
+                                    complementary products
+                                </li>
+                                <li>Increase average transaction value</li>
+                                <li>Improve overall store profitability</li>
+                                <li>
+                                    Build stronger customer relationships
+                                    through consultative selling
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(3)">
+                            <span
+                                >How do I use the Basket Size Growth
+                                Calculator?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Follow these steps:</p>
+                            <ul>
+                                <li>
+                                    <strong>Step 1:</strong> Enter your current
+                                    weekly transactions, average basket value,
+                                    and current GP%
+                                </li>
+                                <li>
+                                    <strong>Step 2:</strong> Click "Calculate
+                                    Growth Potential" to see scenarios for
+                                    different basket size increases ($1, $1.50,
+                                    $2, etc.)
+                                </li>
+                                <li>
+                                    <strong>Step 3:</strong> Review the weekly,
+                                    monthly, and yearly projections for each
+                                    scenario
+                                </li>
+                                <li>
+                                    <strong>Step 4:</strong> Use the Custom
+                                    Target section to set your own specific
+                                    basket value and GP% goals
+                                </li>
+                            </ul>
+                            <p>
+                                The calculator will automatically update when
+                                you change input values, making it easy to
+                                explore different scenarios.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(4)">
+                            <span
+                                >How do I use the Script Solutions Growth
+                                Calculator?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Follow these steps:</p>
+                            <ul>
+                                <li>
+                                    <strong>Step 1:</strong> Enter your weekly
+                                    script transactions. Then enter how many
+                                    currently include additional OTC products
+                                </li>
+                                <li>
+                                    <strong>Step 2:</strong> Input your average
+                                    OTC product value (default is $17) and
+                                    current store GP%. Store GP% is the
+                                    percentage of gross profit generated by the
+                                    store. This value is typically between 20%
+                                    and 40%.
+                                </li>
+                                <li>
+                                    <strong>Step 3:</strong> Click "Calculate
+                                    Growth Scenarios" to see projections for 2%,
+                                    4%, and 6% increases in conversion
+                                </li>
+                                <li>
+                                    <strong>Step 4:</strong> Review detailed
+                                    weekly, monthly, and yearly breakdowns for
+                                    each scenario
+                                </li>
+                                <li>
+                                    <strong>Step 5:</strong> Use the Custom
+                                    Target section to set your own script
+                                    solutions percentage goal
+                                </li>
+                            </ul>
+                            <p>
+                                The calculator shows both the number of
+                                additional transactions needed and the financial
+                                impact.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(5)">
+                            <span>What does "Script Solution %" mean?</span>
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                The Script Solution % is the percentage of
+                                prescription transactions that include an
+                                additional OTC product purchase.
+                            </p>
+                            <p>
+                                <strong>Calculation:</strong> (Transactions with
+                                Script + Other) ÷ (Total Transactions with
+                                Script) × 100
+                            </p>
+                            <p>
+                                <strong>Example:</strong> If you have 1,254
+                                script transactions per week and 470 of those
+                                include an OTC product, your Script Solution %
+                                is 37.5% (470 ÷ 1,254 × 100).
+                            </p>
+                            <p>
+                                Increasing this percentage is a key strategy for
+                                growing pharmacy revenue and better serving
+                                customer needs.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(6)">
+                            <span
+                                >Where does the $17 average OTC value come
+                                from?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                The $17 default value is based on historical
+                                data and feedback from pharmacy operations
+                                showing the typical average value of OTC
+                                products sold alongside prescriptions.
+                            </p>
+                            <p>
+                                However, you can and should customise this value
+                                to match your store's actual data. If your
+                                average OTC product value is different, simply
+                                change this field to get more accurate
+                                projections for your specific pharmacy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(7)">
+                            <span
+                                >What does GP% mean and why is it
+                                important?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                <strong>GP% (Gross Profit Percentage)</strong>
+                                represents the percentage of sales revenue that
+                                remains after subtracting the cost of goods
+                                sold.
+                            </p>
+                            <p><strong>Why it matters:</strong></p>
+                            <ul>
+                                <li>
+                                    It shows your true profitability, not just
+                                    sales volume
+                                </li>
+                                <li>
+                                    Higher GP% means you keep more profit from
+                                    each sale
+                                </li>
+                                <li>
+                                    Different product categories have different
+                                    GP% (First Aid typically has higher margins
+                                    than more competitive departments like
+                                    Vitamins)
+                                </li>
+                                <li>
+                                    Small improvements in GP% can significantly
+                                    impact overall profitability
+                                </li>
+                            </ul>
+                            <p>
+                                The calculator uses your current GP% to estimate
+                                the profit impact of sales increases, giving you
+                                a more complete picture than sales figures
+                                alone.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(8)">
+                            <span
+                                >Can I use this calculator to track my actual
+                                performance?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                No, this calculator is for forecasting and
+                                goal-setting only.
+                            </p>
+                            <ul>
+                                <p>Use this calculator to:</p>
+                                <li>Set realistic growth targets</li>
+                                <li>
+                                    Understand the potential impact of
+                                    improvements
+                                </li>
+                                <li>Visualise what success might look like</li>
+                                <li>Plan strategies for growth</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(10)">
+                            <span
+                                >What strategies can help me achieve these
+                                growth targets?</span
+                            >
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>For Basket Size Growth:</strong></p>
+                            <ul>
+                                <li>
+                                    Be delegent in staff training; the need to
+                                    know the products and their benefits to pick
+                                    the right set for customers.
+                                </li>
+                                <li>
+                                    Create prominent displays of complementary
+                                    products
+                                </li>
+                                <li>Offer bundles or value packs</li>
+                                <li>
+                                    Use promotions effectively to drive
+                                    cross-selling opportunities
+                                </li>
+                                <li>
+                                    Keep essentials in stock and visible; 'stock
+                                    sells stock'.
+                                </li>
+                            </ul>
+                            <p><strong>For Script Solutions Growth:</strong></p>
+                            <ul>
+                                <li>
+                                    Train pharmacists, techs and assistants on
+                                    consultative selling by asking questions
+                                    that encourage customers to share their
+                                    health concerns and preferences.
+                                </li>
+                                <li>
+                                    Identify common product pairings (e.g. COQ10
+                                    with Statins).
+                                    <i>
+                                        Reminders can be added with FRED
+                                        Dispense drug notes and/or reminder
+                                        cards in prescription baskets.</i
+                                    >
+                                </li>
+                                <li>
+                                    Display add-on items near the dispensary
+                                    and/or within the dispensary for easy
+                                    access.
+                                </li>
+                                <li>
+                                    Use customer consultation time to discuss
+                                    health needs.
+                                </li>
+                                <li>
+                                    Engage suppliers to offer trainings and
+                                    samples for products.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(11)">
+                            <span>Who can I contact for help or guidance?</span>
+                            <span class="faq-arrow">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>
+                                If you need support, have questions about using
+                                these forecasting resources, or want guidance on
+                                implementing growth strategies, please contact
+                                your <strong>Add email</strong>.
+                            </p>
+                            <p>They can provide:</p>
+                            <ul>
+                                <li>
+                                    Interpretation of your calculator results
+                                </li>
+                                <li>Specific strategies for your store</li>
+                                <li>Training and support for your team</li>
+                                <li>
+                                    Access to additional resources and tools
+                                </li>
+                                <li>Guidance on realistic goal-setting</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -876,9 +1170,9 @@
                         uplift in sales.
                     </li>
                     <li>
-                        Please use this as indicative and contact your Pharmacy
-                        Business Leader if you require support or guidance on
-                        using these forecasting resources.
+                        Please use this as indicative and contact [insert email
+                        address] if you require support or guidance on using
+                        these forecasting resources.
                     </li>
                 </ul>
             </div>

@@ -1,0 +1,181 @@
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #f3f4f6;
+}
+.calculator-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+.input-field {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition:
+        border-color 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out;
+}
+.input-field:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+.yellow-input {
+    background-color: #fef3c7;
+    border-color: #fbbf24;
+}
+.btn-primary {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    width: 100%;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.results-table th,
+.results-table td {
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    text-align: left;
+}
+.results-table th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    color: #1f2937;
+    font-size: 0.875rem;
+}
+.results-table td {
+    color: #4b5563;
+}
+.results-table td.number {
+    text-align: right;
+    font-weight: 500;
+}
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+.tab-button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    background-color: #e5e7eb;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 8px 8px 0 0;
+    margin-right: 0.25rem;
+    font-weight: 500;
+}
+.tab-button.active {
+    background-color: #2563eb;
+    color: white;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+.scenario-section {
+    background-color: #f0f9ff;
+    border: 2px solid #3b82f6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.scenario-header {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1e40af;
+    margin-bottom: 1rem;
+}
+.current-state {
+    background-color: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.target-section {
+    background-color: #d1fae5;
+    border: 2px solid #10b981;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+.faq-item {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.faq-question {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #1f2937;
+    transition: background-color 0.2s ease;
+}
+.faq-question:hover {
+    background-color: #f9fafb;
+}
+.faq-question.active {
+    background-color: #eff6ff;
+    color: #2563eb;
+}
+.faq-arrow {
+    transition: transform 0.3s ease;
+    font-size: 1.25rem;
+    color: #6b7280;
+}
+.faq-question.active .faq-arrow {
+    transform: rotate(180deg);
+    color: #2563eb;
+}
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 1.5rem;
+}
+.faq-answer.active {
+    max-height: 1000px;
+    padding: 0 1.5rem 1.25rem 1.5rem;
+}
+.faq-answer p {
+    margin-bottom: 0.75rem;
+    color: #4b5563;
+    line-height: 1.6;
+}
+.faq-answer ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+.faq-answer li {
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+}
