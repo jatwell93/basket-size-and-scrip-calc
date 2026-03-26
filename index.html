@@ -3,41 +3,80 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Pharmacy Growth Calculator</title>
-        <script src="https://cdn.tailwindcss.com"></script>
+        <title>Script Solution Calculator — PharmIQ</title>
+        <meta name="description" content="Estimate potential growth from basket size increases and script solutions for your pharmacy." />
         <link rel="stylesheet" href="style.css">
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
     </head>
     <body class="p-4 md:p-8">
         <div class="max-w-6xl mx-auto">
-            <header class="text-center mb-8">
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-800">
-                    Pharmacy Growth Calculator
-                </h1>
-                <p class="text-gray-600 mt-2">
-                    Estimate potential growth from basket size increases and
-                    script solutions
-                </p>
+            <header class="pharmiq-site-header mb-8">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                </button>
+                <div class="pharmiq-logo-lockup">
+                    <!-- PharmIQ Full Logo — reversed for dark background -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none" aria-label="PharmIQ" role="img">
+                      <title>PharmIQ</title>
+                      <defs>
+                        <clipPath id="hex-clip-hdr">
+                          <polygon points="44,24 34,6.68 14,6.68 4,24 14,41.32 34,41.32"/>
+                        </clipPath>
+                      </defs>
+                      <!-- Hex icon in lighter teal for dark bg visibility -->
+                      <polygon points="44,24 34,6.68 14,6.68 4,24 14,41.32 34,41.32" fill="#14B8A6"/>
+                      <g clip-path="url(#hex-clip-hdr)">
+                        <rect x="11" y="29" width="7" height="10" rx="1.5" fill="white" fill-opacity="0.9"/>
+                        <rect x="20.5" y="21" width="7" height="18" rx="1.5" fill="white"/>
+                        <rect x="30" y="11" width="7" height="28" rx="1.5" fill="white"/>
+                      </g>
+                      <!-- "Pharm" in white, "IQ" in teal-light -->
+                      <text x="58" y="34" font-family="'Space Grotesk',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.3" fill="#FFFFFF">Pharm</text>
+                      <text x="138" y="34" font-family="'Space Grotesk',system-ui,sans-serif" font-size="26" font-weight="700" letter-spacing="-0.3" fill="#14B8A6">IQ</text>
+                    </svg>
+                    <div class="pharmiq-divider"></div>
+                    <span class="pharmiq-tool-name">Script Solution Calculator</span>
+                </div>
+                <p class="pharmiq-tool-desc">Estimate potential growth from basket size increases and script solutions</p>
             </header>
 
             <!-- Tab Navigation -->
-            <div class="mb-4">
-                <button class="tab-button active" data-tab="basket">
+            <div class="tab-nav mb-4" role="tablist" aria-label="Calculator Tabs">
+                <button class="tab-button active" 
+                        data-tab="basket" 
+                        role="tab" 
+                        aria-selected="true" 
+                        aria-controls="basket-tab" 
+                        id="tab-basket">
                     Basket Size Growth
                 </button>
-                <button class="tab-button" data-tab="script">
+                <button class="tab-button" 
+                        data-tab="script" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="script-tab" 
+                        id="tab-script">
                     Script Solutions Growth
                 </button>
-                <button class="tab-button" data-tab="faq">
+                <button class="tab-button" 
+                        data-tab="faq" 
+                        role="tab" 
+                        aria-selected="false" 
+                        aria-controls="faq-tab" 
+                        id="tab-faq">
                     FAQ
                 </button>
             </div>
 
             <!-- Basket Size Calculator Tab -->
-            <div id="basket-tab" class="tab-content active">
+            <div id="basket-tab" 
+                 class="tab-content active" 
+                 role="tabpanel" 
+                 aria-labelledby="tab-basket">
                 <div class="calculator-card">
                     <h2
                         class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3"
@@ -46,7 +85,7 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="numTransactions" class="block font-medium text-gray-700 mb-2"
                                 >Weekly Transactions:</label
                             >
                             <input
@@ -55,14 +94,17 @@
                                 class="input-field yellow-input"
                                 placeholder="e.g., 10000"
                                 value="10000"
+                                aria-describedby="error-numTransactions"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-numTransactions"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="currentAvgBasket" class="block font-medium text-gray-700 mb-2"
                                 >Current Avg. Basket ($):</label
                             >
                             <input
@@ -72,14 +114,17 @@
                                 placeholder="e.g., 28.58"
                                 value="28.58"
                                 step="0.01"
+                                aria-describedby="error-currentAvgBasket"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-currentAvgBasket"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="currentGpPercentage" class="block font-medium text-gray-700 mb-2"
                                 >Current GP %:</label
                             >
                             <input
@@ -89,10 +134,13 @@
                                 placeholder="e.g., 34"
                                 value="34"
                                 step="0.01"
+                                aria-describedby="error-currentGpPercentage"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-currentGpPercentage"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                     </div>
@@ -113,7 +161,7 @@
 
                     <div id="basketResults" style="display: none">
                         <div
-                            class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6"
+                            class="current-performance-card p-4 mb-6"
                         >
                             <h3
                                 class="text-xl font-semibold text-gray-700 mb-3"
@@ -152,7 +200,7 @@
                         </table>
 
                         <div
-                            class="bg-green-50 border border-green-200 rounded-lg p-4 mt-6"
+                            class="target-section p-4 mt-6"
                         >
                             <h3
                                 class="text-xl font-semibold text-green-800 mb-4"
@@ -220,7 +268,10 @@
             </div>
 
             <!-- Script Solutions Calculator Tab -->
-            <div id="script-tab" class="tab-content">
+            <div id="script-tab" 
+                 class="tab-content" 
+                 role="tabpanel" 
+                 aria-labelledby="tab-script">
                 <div class="calculator-card">
                     <h2
                         class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3"
@@ -234,7 +285,7 @@
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="weeklyScriptTrans" class="block font-medium text-gray-700 mb-2"
                                 >Weekly Script Sales:</label
                             >
                             <input
@@ -243,14 +294,17 @@
                                 class="input-field yellow-input"
                                 placeholder="e.g., 1254"
                                 value="1254"
+                                aria-describedby="error-weeklyScriptTrans"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-weeklyScriptTrans"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="scriptPlusOther" class="block font-medium text-gray-700 mb-2"
                                 >Weekly Script + Other:</label
                             >
                             <input
@@ -259,14 +313,17 @@
                                 class="input-field yellow-input"
                                 placeholder="e.g. 470 - s3,OTC's, etc."
                                 value="470"
+                                aria-describedby="error-scriptPlusOther"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-scriptPlusOther"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="avgOtcValue" class="block font-medium text-gray-700 mb-2"
                                 >Avg. OTC Value ($):</label
                             >
                             <input
@@ -276,11 +333,13 @@
                                 placeholder="e.g. 17"
                                 value="17"
                                 step="0.01"
+                                aria-describedby="error-avgOtcValue"
+                                aria-invalid="false"
                             />
-                            <p id="error-avgOtcValue" class="error-message"></p>
+                            <p id="error-avgOtcValue" class="error-message" aria-live="polite"></p>
                         </div>
                         <div>
-                            <label class="block font-medium text-gray-700 mb-2"
+                            <label for="scriptGpPercent" class="block font-medium text-gray-700 mb-2"
                                 >Current Store OTC GP %:</label
                             >
                             <input
@@ -290,10 +349,13 @@
                                 placeholder="e.g., 34.28"
                                 value="34.28"
                                 step="0.01"
+                                aria-describedby="error-scriptGpPercent"
+                                aria-invalid="false"
                             />
                             <p
                                 id="error-scriptGpPercent"
                                 class="error-message"
+                                aria-live="polite"
                             ></p>
                         </div>
                     </div>
@@ -317,7 +379,6 @@
                         <div class="current-state">
                             <h3
                                 class="text-xl font-semibold mb-3"
-                                style="color: #92400e"
                             >
                                 Current Weekly Store Detail
                             </h3>
@@ -616,7 +677,6 @@
                         <div class="target-section">
                             <h3
                                 class="text-xl font-semibold mb-4"
-                                style="color: #065f46"
                             >
                                 Set Your Own Store Targets - Enter Your Target
                                 Below
@@ -746,7 +806,10 @@
             </div>
 
             <!-- FAQ Tab -->
-            <div id="faq-tab" class="tab-content">
+            <div id="faq-tab" 
+                 class="tab-content" 
+                 role="tabpanel" 
+                 aria-labelledby="tab-faq">
                 <div class="calculator-card">
                     <h2
                         class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3"
@@ -755,10 +818,10 @@
                     </h2>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span>What is this calculator used for?</span>
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 This calculator is a resource tool designed to
@@ -787,13 +850,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >What are "Script Solutions" or "naked
                                 scripts"?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 <strong>Script Solutions</strong> refers to
@@ -827,13 +890,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >How do I use the Basket Size Growth
                                 Calculator?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>Follow these steps:</p>
                             <ul>
@@ -868,13 +931,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >How do I use the Script Solutions Growth
                                 Calculator?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>Follow these steps:</p>
                             <ul>
@@ -916,10 +979,10 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span>What does "Script Solution %" mean?</span>
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 The Script Solution % is the percentage of
@@ -946,13 +1009,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >Where does the $17 average OTC value come
                                 from?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 The $17 default value is based on historical
@@ -971,13 +1034,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >What does GP% mean and why is it
                                 important?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 <strong>GP% (Gross Profit Percentage)</strong>
@@ -1016,13 +1079,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >Can I use this calculator to track my actual
                                 performance?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 No, this calculator is for forecasting and
@@ -1042,13 +1105,13 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span
                                 >What strategies can help me achieve these
                                 growth targets?</span
                             >
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p><strong>For Basket Size Growth:</strong></p>
                             <ul>
@@ -1106,10 +1169,10 @@
                     </div>
 
                     <div class="faq-item">
-                        <div class="faq-question">
+                        <button class="faq-question" aria-expanded="false">
                             <span>Who can I contact for help or guidance?</span>
                             <span class="faq-arrow">▼</span>
-                        </div>
+                        </button>
                         <div class="faq-answer">
                             <p>
                                 If you need support, have questions about using

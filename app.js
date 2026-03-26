@@ -1,3 +1,59 @@
+// ── Animation helpers ────────────────────────────────────────────
+
+// Count up a numeric value displayed via a formatter function
+function animateValue(el, target, formatter) {
+  var start = performance.now();
+  var duration = 650;
+  function tick(now) {
+    var p = Math.min((now - start) / duration, 1);
+    var eased = 1 - Math.pow(1 - p, 4); // ease-out-quart
+    el.textContent = formatter(target * eased);
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = formatter(target);
+  }
+  requestAnimationFrame(tick);
+}
+
+// Show a results panel; animate it in if it was hidden. Returns true on first reveal.
+function revealResults(id) {
+  var el = document.getElementById(id);
+  var wasHidden = el.style.display !== 'block';
+  if (wasHidden) {
+    el.style.display = 'block';
+    el.classList.add('results-reveal');
+  }
+  return wasHidden;
+}
+
+// Add stagger entrance animation to all rows in a tbody
+function staggerRows(tbody) {
+  tbody.querySelectorAll('tr').forEach(function(row, i) {
+    row.style.animationDelay = (i * 55) + 'ms';
+    row.classList.add('row-animate');
+  });
+}
+
+// Flash a value element with a teal glow to signal it changed
+function flashValue(el) {
+  el.classList.remove('value-flash');
+  void el.offsetWidth; // force reflow so animation replays
+  el.classList.add('value-flash');
+}
+
+// Shake an input horizontally to signal a validation error
+function shakeInput(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('input-shake');
+  void el.offsetWidth;
+  el.classList.add('input-shake');
+  el.addEventListener('animationend', function() {
+    el.classList.remove('input-shake');
+  }, { once: true });
+}
+
+// ────────────────────────────────────────────────────────────────
+
 // Tab switching
 function switchTab(tab) {
   // Get all tabs and buttons
@@ -9,34 +65,60 @@ function switchTab(tab) {
   const buttons = document.querySelectorAll(".tab-button");
 
   // Hide all tabs and deactivate all buttons
-  Object.values(tabs).forEach((tabEl) => {
+  Object.keys(tabs).forEach((key) => {
+    const tabEl = tabs[key];
     if (tabEl) tabEl.classList.remove("active");
+    
+    // Update ARIA on corresponding button
+    const btn = Array.from(buttons).find(b => b.dataset.tab === key);
+    if (btn) {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-selected", "false");
+    }
   });
-  buttons.forEach((btn) => btn.classList.remove("active"));
 
   // Show selected tab and activate corresponding button
   if (tabs[tab]) {
     tabs[tab].classList.add("active");
-    const buttonIndex = tab === "basket" ? 0 : tab === "script" ? 1 : 2;
-    buttons[buttonIndex].classList.add("active");
+    const activeBtn = Array.from(buttons).find(b => b.dataset.tab === tab);
+    if (activeBtn) {
+      activeBtn.classList.add("active");
+      activeBtn.setAttribute("aria-selected", "true");
+    }
   }
 }
 
-// FAQ accordion functionality
+// FAQ accordion functionality — JS height animation for accurate easing
 function toggleFaq(index) {
   const faqItems = document.querySelectorAll(".faq-item");
   const question = faqItems[index].querySelector(".faq-question");
   const answer = faqItems[index].querySelector(".faq-answer");
+  const isActive = question.classList.contains("active");
 
-  const isActive = answer.classList.contains("active");
-
-  // Toggle the clicked FAQ
   if (isActive) {
+    // Collapse: lock height then animate to 0
+    answer.style.height = answer.scrollHeight + "px";
+    answer.offsetHeight; // force reflow
+    answer.style.height = "0px";
     question.classList.remove("active");
-    answer.classList.remove("active");
+    question.setAttribute("aria-expanded", "false");
+    answer.addEventListener("transitionend", function handler() {
+      answer.classList.remove("active");
+      answer.removeEventListener("transitionend", handler);
+    }, { once: true });
   } else {
-    question.classList.add("active");
+    // Expand: measure target height then animate from 0
     answer.classList.add("active");
+    const targetH = answer.scrollHeight + "px";
+    answer.style.height = "0px";
+    answer.offsetHeight; // force reflow
+    answer.style.height = targetH;
+    question.classList.add("active");
+    question.setAttribute("aria-expanded", "true");
+    answer.addEventListener("transitionend", function handler() {
+      answer.style.height = "auto"; // allow natural resize after animation
+      answer.removeEventListener("transitionend", handler);
+    }, { once: true });
   }
 }
 
@@ -70,39 +152,47 @@ function calculateBasketGrowth() {
   document
     .querySelectorAll(".error-message")
     .forEach((el) => (el.textContent = ""));
+  
+  // Reset aria-invalid
+  ["numTransactions", "currentAvgBasket", "currentGpPercentage"].forEach(id => {
+    document.getElementById(id).setAttribute("aria-invalid", "false");
+  });
 
-  const numTransactions = parseFloat(
-    document.getElementById("numTransactions").value,
-  );
-  const currentAvgBasket = parseFloat(
-    document.getElementById("currentAvgBasket").value,
-  );
-  const currentGpPercent =
-    parseFloat(document.getElementById("currentGpPercentage").value) / 100;
+  const numTransactionsInput = document.getElementById("numTransactions");
+  const currentAvgBasketInput = document.getElementById("currentAvgBasket");
+  const currentGpPercentageInput = document.getElementById("currentGpPercentage");
+
+  const numTransactions = parseFloat(numTransactionsInput.value);
+  const currentAvgBasket = parseFloat(currentAvgBasketInput.value);
+  const currentGpPercent = parseFloat(currentGpPercentageInput.value) / 100;
 
   if (!validateInput(numTransactions, 1)) {
     document.getElementById("error-numTransactions").textContent =
       "Please enter a valid number of transactions";
+    numTransactionsInput.setAttribute("aria-invalid", "true");
+    shakeInput("numTransactions");
     return;
   }
   if (!validateInput(currentAvgBasket, 0.01)) {
     document.getElementById("error-currentAvgBasket").textContent =
       "Please enter a valid basket value";
+    currentAvgBasketInput.setAttribute("aria-invalid", "true");
+    shakeInput("currentAvgBasket");
     return;
   }
   if (!validateInput(currentGpPercent * 100, 0)) {
     document.getElementById("error-currentGpPercentage").textContent =
       "Please enter a valid GP percentage";
+    currentGpPercentageInput.setAttribute("aria-invalid", "true");
+    shakeInput("currentGpPercentage");
     return;
   }
 
   const currentWeeklySales = numTransactions * currentAvgBasket;
   const currentWeeklyProfit = currentWeeklySales * currentGpPercent;
 
-  document.getElementById("currentWeeklySales").textContent =
-    formatCurrency(currentWeeklySales);
-  document.getElementById("currentWeeklyProfit").textContent =
-    formatCurrency(currentWeeklyProfit);
+  const salesEl = document.getElementById("currentWeeklySales");
+  const profitEl = document.getElementById("currentWeeklyProfit");
 
   const increments = [1, 1.5, 2, 2.5, 3];
   const tbody = document.getElementById("basketIncrementTable");
@@ -122,7 +212,21 @@ function calculateBasketGrowth() {
                         `;
   });
 
-  document.getElementById("basketResults").style.display = "block";
+  // Callout the highest-increment row (best opportunity)
+  var topRow = tbody.lastElementChild;
+  if (topRow) topRow.classList.add('basket-top-row');
+
+  const firstReveal = revealResults("basketResults");
+  if (firstReveal) {
+    staggerRows(tbody);
+    animateValue(salesEl, currentWeeklySales, formatCurrency);
+    animateValue(profitEl, currentWeeklyProfit, formatCurrency);
+  } else {
+    salesEl.textContent = formatCurrency(currentWeeklySales);
+    profitEl.textContent = formatCurrency(currentWeeklyProfit);
+    flashValue(salesEl);
+    flashValue(profitEl);
+  }
 }
 
 function calculateCustomBasket() {
@@ -175,7 +279,12 @@ function calculateCustomBasket() {
                         `;
   });
 
-  document.getElementById("customBasketResults").style.display = "block";
+  revealResults("customBasketResults");
+  staggerRows(tbody);
+
+  // Callout the yearly row (highest impact period)
+  var yearlyRow = tbody.lastElementChild;
+  if (yearlyRow) yearlyRow.classList.add('yearly-row');
 }
 
 // SCRIPT SOLUTIONS CALCULATOR
@@ -184,35 +293,48 @@ function calculateScriptGrowth() {
     .querySelectorAll(".error-message")
     .forEach((el) => (el.textContent = ""));
 
-  const weeklyScriptTrans = parseFloat(
-    document.getElementById("weeklyScriptTrans").value,
-  );
-  const scriptPlusOther = parseFloat(
-    document.getElementById("scriptPlusOther").value,
-  );
-  const avgOtcValue = parseFloat(document.getElementById("avgOtcValue").value);
-  const scriptGpPercent =
-    parseFloat(document.getElementById("scriptGpPercent").value) / 100;
+  // Reset aria-invalid
+  ["weeklyScriptTrans", "scriptPlusOther", "avgOtcValue", "scriptGpPercent"].forEach(id => {
+    document.getElementById(id).setAttribute("aria-invalid", "false");
+  });
+
+  const weeklyScriptTransInput = document.getElementById("weeklyScriptTrans");
+  const scriptPlusOtherInput = document.getElementById("scriptPlusOther");
+  const avgOtcValueInput = document.getElementById("avgOtcValue");
+  const scriptGpPercentInput = document.getElementById("scriptGpPercent");
+
+  const weeklyScriptTrans = parseFloat(weeklyScriptTransInput.value);
+  const scriptPlusOther = parseFloat(scriptPlusOtherInput.value);
+  const avgOtcValue = parseFloat(avgOtcValueInput.value);
+  const scriptGpPercent = parseFloat(scriptGpPercentInput.value) / 100;
 
   // Validate inputs
   if (!validateInput(weeklyScriptTrans, 1)) {
     document.getElementById("error-weeklyScriptTrans").textContent =
       "Please enter valid transactions";
+    weeklyScriptTransInput.setAttribute("aria-invalid", "true");
+    shakeInput("weeklyScriptTrans");
     return;
   }
   if (!validateInput(scriptPlusOther, 0)) {
     document.getElementById("error-scriptPlusOther").textContent =
       "Please enter valid transactions";
+    scriptPlusOtherInput.setAttribute("aria-invalid", "true");
+    shakeInput("scriptPlusOther");
     return;
   }
   if (!validateInput(avgOtcValue, 0.01)) {
     document.getElementById("error-avgOtcValue").textContent =
       "Please enter valid OTC value";
+    avgOtcValueInput.setAttribute("aria-invalid", "true");
+    shakeInput("avgOtcValue");
     return;
   }
   if (!validateInput(scriptGpPercent * 100, 0)) {
     document.getElementById("error-scriptGpPercent").textContent =
       "Please enter valid GP percentage";
+    scriptGpPercentInput.setAttribute("aria-invalid", "true");
+    shakeInput("scriptGpPercent");
     return;
   }
 
@@ -270,10 +392,12 @@ function calculateScriptGrowth() {
   // Update note
   document.getElementById("avgValueNote").textContent = avgOtcValue.toFixed(2);
 
-  document.getElementById("scriptResults").style.display = "block";
-  document
-    .getElementById("scriptResults")
-    .scrollIntoView({ behavior: "smooth" });
+  const firstScriptReveal = revealResults("scriptResults");
+  if (firstScriptReveal) {
+    document
+      .getElementById("scriptResults")
+      .scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 function calculateScenario(
@@ -438,7 +562,7 @@ function calculateCustomScript() {
                         </tr>
                     `;
 
-  document.getElementById("customScriptResults").style.display = "block";
+  revealResults("customScriptResults");
   document
     .getElementById("customScriptResults")
     .scrollIntoView({ behavior: "smooth" });
@@ -491,5 +615,17 @@ if (typeof window !== "undefined") {
   // FAQ accordion: attach by index order
   document.querySelectorAll('.faq-question').forEach((q, i) => {
     q.addEventListener('click', () => toggleFaq(i));
+  });
+
+  // Theme toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('pharmiq-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+
+  themeToggle?.addEventListener('click', () => {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('pharmiq-theme', newTheme);
   });
 }
