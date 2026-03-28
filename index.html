@@ -7,7 +7,7 @@
         <meta name="description" content="Estimate potential growth from basket size increases and script solutions for your pharmacy." />
         <link rel="stylesheet" href="style.css">
         <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
             rel="stylesheet"
         />
     </head>
@@ -41,7 +41,7 @@
                     <div class="pharmiq-divider"></div>
                     <span class="pharmiq-tool-name">Script Solution Calculator</span>
                 </div>
-                <p class="pharmiq-tool-desc">Estimate potential growth from basket size increases and script solutions</p>
+                <p class="pharmiq-tool-desc">"Infrastructure for Choice. Clarity for Growth."</p>
             </header>
 
             <!-- Tab Navigation -->
@@ -91,7 +91,7 @@
                             <input
                                 type="number"
                                 id="numTransactions"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g., 10000"
                                 value="10000"
                                 aria-describedby="error-numTransactions"
@@ -110,7 +110,7 @@
                             <input
                                 type="number"
                                 id="currentAvgBasket"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g., 28.58"
                                 value="28.58"
                                 step="0.01"
@@ -130,7 +130,7 @@
                             <input
                                 type="number"
                                 id="currentGpPercentage"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g., 34"
                                 value="34"
                                 step="0.01"
@@ -159,98 +159,59 @@
                         Calculate Growth Potential
                     </button>
 
-                    <div id="basketResults" style="display: none">
-                        <div
-                            class="current-performance-card p-4 mb-6"
-                        >
-                            <h3
-                                class="text-xl font-semibold text-gray-700 mb-3"
-                            >
-                                Current Performance:
-                            </h3>
-                            <p class="mb-2">
-                                Weekly Sales:
-                                <span
-                                    id="currentWeeklySales"
-                                    class="font-bold"
-                                ></span>
-                            </p>
-                            <p>
-                                Weekly Profit:
-                                <span
-                                    id="currentWeeklyProfit"
-                                    class="font-bold"
-                                ></span>
-                            </p>
+                <div id="basketResults" style="display: none">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Current Performance Card -->
+                        <div class="calculator-card current-performance-card m-0">
+                            <h3 class="mb-4">Current Weekly Performance</h3>
+                            <div class="space-y-1">
+                                <p>Weekly Sales: <span id="currentWeeklySales" class="font-bold"></span></p>
+                                <p>Weekly Profit: <span id="currentWeeklyProfit" class="font-bold"></span></p>
+                            </div>
                         </div>
 
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">
-                            Incremental Growth from Basket Size Increases:
-                        </h3>
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Basket Increase</th>
-                                    <th>Weekly</th>
-                                    <th>Monthly (4 weeks)</th>
-                                    <th>Yearly (52 weeks)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="basketIncrementTable"></tbody>
-                        </table>
+                        <!-- Growth Potential Overview -->
+                        <div class="calculator-card m-0">
+                            <h3 class="mb-4">Growth Strategy</h3>
+                            <p class="text-sm text-gray-600">
+                                Small increases in average basket size directly translate to significant bottom-line recovery. Use the table below to identify your next growth milestone.
+                            </p>
+                        </div>
+                    </div>
 
-                        <div
-                            class="target-section p-4 mt-6"
-                        >
-                            <h3
-                                class="text-xl font-semibold text-green-800 mb-4"
-                            >
-                                Custom Target
-                            </h3>
-                            <div
-                                class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
-                            >
-                                <div>
-                                    <label
-                                        class="block font-medium text-gray-700 mb-2"
-                                        >Target Avg. Basket ($):</label
-                                    >
-                                    <input
-                                        type="number"
-                                        id="targetAvgBasket"
-                                        class="input-field yellow-input"
-                                        placeholder="e.g., 29.58"
-                                        value="29.58"
-                                        step="0.01"
-                                    />
-                                </div>
-                                <div>
-                                    <label
-                                        class="block font-medium text-gray-700 mb-2"
-                                        >Target GP %:</label
-                                    >
-                                    <input
-                                        type="number"
-                                        id="targetGpPercentage"
-                                        class="input-field yellow-input"
-                                        placeholder="e.g., 35"
-                                        value="35"
-                                        step="0.01"
-                                    />
-                                </div>
+                    <div class="calculator-card mb-6">
+                        <h3 class="mb-4">Incremental Growth from Basket Size Increases</h3>
+                        <div class="overflow-x-auto">
+                            <table class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Basket Increase</th>
+                                        <th>Weekly</th>
+                                        <th>Monthly (4 weeks)</th>
+                                        <th>Yearly (52 weeks)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="basketIncrementTable"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="calculator-card target-section m-0">
+                        <h3 class="text-green-800 mb-6">Set Your Custom Growth Target</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block font-medium text-gray-700 mb-2">Target Avg. Basket ($):</label>
+                                <input type="number" id="targetAvgBasket" class="input-field" placeholder="e.g., 29.58" value="29.58" step="0.01" />
                             </div>
-                            <button
-                                id="btnCalculateCustomBasket"
-                                class="btn-primary"
-                            >
-                                Calculate Custom Target
-                            </button>
+                            <div>
+                                <label class="block font-medium text-gray-700 mb-2">Target GP %:</label>
+                                <input type="number" id="targetGpPercentage" class="input-field" placeholder="e.g., 35" value="35" step="0.01" />
+                            </div>
+                        </div>
+                        <button id="btnCalculateCustomBasket" class="btn-primary max-w-md">Calculate Custom Target</button>
 
-                            <div
-                                id="customBasketResults"
-                                style="display: none"
-                                class="mt-4"
-                            >
+                        <div id="customBasketResults" style="display: none" class="mt-8">
+                            <div class="overflow-x-auto">
                                 <table class="results-table">
                                     <thead>
                                         <tr>
@@ -291,7 +252,7 @@
                             <input
                                 type="number"
                                 id="weeklyScriptTrans"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g., 1254"
                                 value="1254"
                                 aria-describedby="error-weeklyScriptTrans"
@@ -310,7 +271,7 @@
                             <input
                                 type="number"
                                 id="scriptPlusOther"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g. 470 - s3,OTC's, etc."
                                 value="470"
                                 aria-describedby="error-scriptPlusOther"
@@ -329,7 +290,7 @@
                             <input
                                 type="number"
                                 id="avgOtcValue"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g. 17"
                                 value="17"
                                 step="0.01"
@@ -345,7 +306,7 @@
                             <input
                                 type="number"
                                 id="scriptGpPercent"
-                                class="input-field yellow-input"
+                                class="input-field"
                                 placeholder="e.g., 34.28"
                                 value="34.28"
                                 step="0.01"
@@ -375,13 +336,9 @@
                     </button>
 
                     <div id="scriptResults" style="display: none">
-                        <!-- Current State -->
-                        <div class="current-state">
-                            <h3
-                                class="text-xl font-semibold mb-3"
-                            >
-                                Current Weekly Store Detail
-                            </h3>
+                        <!-- Current State Card -->
+                        <div class="calculator-card current-state m-0 mb-6">
+                            <h3 class="mb-3">Current Weekly Store Detail</h3>
                             <div class="overflow-x-auto">
                                 <table class="results-table">
                                     <thead>
@@ -397,408 +354,79 @@
                             </div>
                         </div>
 
-                        <!-- 2% Increase Scenario -->
-                        <div class="scenario-section">
-                            <h3 class="scenario-header">
-                                What Incremental Sales Could Be Achieved With A
-                                2% Increase In Script Solutions Conversion
-                            </h3>
-
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Weekly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario2Weekly"></tbody>
-                                    </table>
+                        <!-- Growth Scenarios Bento -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <!-- 2% Scenario -->
+                            <div class="calculator-card scenario-section m-0">
+                                <h3 class="scenario-header">2% Growth Potential</h3>
+                                <p class="text-xs text-gray-600 mb-4">Focus on attaching one extra OTC item to every 50 scripts.</p>
+                                <div id="scenario2Weekly"></div>
+                                <div class="mt-4 pt-4 border-t border-teal-100/20">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-teal-700">Projected Impact</p>
+                                    <div class="flex justify-between items-end mt-2">
+                                        <span class="text-xs text-gray-500">Yearly Profit uplift:</span>
+                                        <span class="text-lg font-bold text-teal-700" id="yearlyProfit2"></span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    4 Week Month Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario2Monthly"></tbody>
-                                    </table>
+                            <!-- 4% Scenario -->
+                            <div class="calculator-card scenario-section m-0">
+                                <h3 class="scenario-header">4% Growth Potential</h3>
+                                <p class="text-xs text-gray-600 mb-4">Targeting deeper health consultation at the point of dispense.</p>
+                                <div id="scenario4Weekly"></div>
+                                <div class="mt-4 pt-4 border-t border-teal-100/20">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-teal-700">Projected Impact</p>
+                                    <div class="flex justify-between items-end mt-2">
+                                        <span class="text-xs text-gray-500">Yearly Profit uplift:</span>
+                                        <span class="text-lg font-bold text-teal-700" id="yearlyProfit4"></span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div>
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Yearly Detail
-                                </h4>
+                            <!-- 6% Scenario -->
+                            <div class="calculator-card scenario-section m-0">
+                                <h3 class="scenario-header">6% Growth Potential</h3>
+                                <p class="text-xs text-gray-600 mb-4">Infrastructure for high-performance clinical teams.</p>
+                                <div id="scenario6Weekly"></div>
+                                <div class="mt-4 pt-4 border-t border-teal-100/20">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-teal-700">Projected Impact</p>
+                                    <div class="flex justify-between items-end mt-2">
+                                        <span class="text-xs text-gray-500">Yearly Profit uplift:</span>
+                                        <span class="text-lg font-bold text-teal-700" id="yearlyProfit6"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Target Card -->
+                        <div class="calculator-card target-section m-0">
+                            <h3 class="text-green-800 mb-6">Set Your Custom Script Target</h3>
+                            <div class="max-w-xs mb-6">
+                                <label class="block font-medium text-gray-700 mb-2">Target Script Solutions %:</label>
+                                <input type="number" id="targetScriptPercent" class="input-field" placeholder="e.g. 45" step="0.1" />
+                            </div>
+                            <button id="btnCalculateCustomScript" class="btn-primary max-w-md">Calculate Custom Target</button>
+
+                            <div id="customScriptResults" style="display: none" class="mt-8">
                                 <div class="overflow-x-auto">
                                     <table class="results-table">
                                         <thead>
                                             <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
+                                                <th>Period</th>
+                                                <th>Incremental Sales</th>
+                                                <th>Incremental Profit</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="scenario2Yearly"></tbody>
+                                        <tbody id="customScriptTable"></tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 4% Increase Scenario -->
-                        <div class="scenario-section">
-                            <h3 class="scenario-header">
-                                What Incremental Sales Could Be Achieved With A
-                                4% Increase In Script Solutions Conversion
-                            </h3>
-
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Weekly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario4Weekly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    4 Week Month Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario4Monthly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Yearly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario4Yearly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 6% Increase Scenario -->
-                        <div class="scenario-section">
-                            <h3 class="scenario-header">
-                                What Incremental Sales Could Be Achieved With A
-                                6% Increase In Script Solutions Conversion
-                            </h3>
-
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Weekly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario6Weekly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    4 Week Month Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario6Monthly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Yearly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="scenario6Yearly"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Custom Target Section -->
-                        <div class="target-section">
-                            <h3
-                                class="text-xl font-semibold mb-4"
-                            >
-                                Set Your Own Store Targets - Enter Your Target
-                                Below
-                            </h3>
-                            <div class="max-w-xs mb-4">
-                                <label
-                                    class="block font-medium text-gray-700 mb-2"
-                                    >Target Script Solutions % (enter just the
-                                    percentage):</label
-                                >
-                                <input
-                                    type="number"
-                                    id="targetScriptPercent"
-                                    class="input-field yellow-input"
-                                    placeholder="e.g. 45"
-                                    step="0.1"
-                                />
-                            </div>
-                            <button
-                                id="btnCalculateCustomScript"
-                                class="btn-primary max-w-md"
-                            >
-                                Calculate Custom Target
-                            </button>
-
-                            <div
-                                id="customScriptResults"
-                                style="display: none"
-                                class="mt-4"
-                            >
-                                <h4
-                                    class="font-semibold text-gray-700 mb-3 text-lg"
-                                >
-                                    Weekly Target Figures
-                                </h4>
-                                <div class="overflow-x-auto mb-3">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="customWeeklyTable"></tbody>
-                                    </table>
-                                </div>
-
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    4 Week Month Detail
-                                </h4>
-                                <div class="overflow-x-auto mb-3">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="customMonthlyTable"></tbody>
-                                    </table>
-                                </div>
-
-                                <h4 class="font-semibold text-gray-700 mb-2">
-                                    Yearly Detail
-                                </h4>
-                                <div class="overflow-x-auto">
-                                    <table class="results-table">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Trans w/ Script</th>
-                                                <th>
-                                                    No. Trans w/ Script + Other
-                                                </th>
-                                                <th>
-                                                    Proposed Script Solutions %
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Sales
-                                                </th>
-                                                <th>
-                                                    Potential Incremental Profit
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="customYearlyTable"></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div
-                            class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4"
-                        >
-                            <p class="text-sm text-gray-700">
-                                <strong>Please note:</strong> This data is a
-                                speculative model on what could be achieved with
-                                the average "other" value estimated to be $<span
-                                    id="avgValueNote"
-                                ></span>
-                                each
+                        <div class="bg-brand-teal-50 rounded-lg p-4 mt-8 border border-teal-100/30">
+                            <p class="text-xs text-gray-600 italic">
+                                * Speculative model based on an estimated average "other" value of $<span id="avgValueNote"></span>. Actual results will vary by category mix and store demographics.
                             </p>
                         </div>
                     </div>
@@ -806,415 +434,67 @@
             </div>
 
             <!-- FAQ Tab -->
-            <div id="faq-tab" 
-                 class="tab-content" 
-                 role="tabpanel" 
-                 aria-labelledby="tab-faq">
+            <div id="faq-tab" class="tab-content" role="tabpanel" aria-labelledby="tab-faq">
                 <div class="calculator-card">
-                    <h2
-                        class="text-2xl font-semibold text-gray-700 mb-6 border-b pb-3"
-                    >
-                        Frequently Asked Questions
-                    </h2>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span>What is this calculator used for?</span>
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                This calculator is a resource tool designed to
-                                help pharmacy teams visualise and quantify
-                                potential sales and profit growth opportunities.
-                                It focuses on two key strategies:
-                            </p>
-                            <ul>
-                                <li>
-                                    <strong>Basket Size Growth:</strong>
-                                    Understanding the financial impact of
-                                    increasing the average transaction value
-                                </li>
-                                <li>
-                                    <strong>Script Solutions Growth:</strong>
-                                    Calculating potential revenue from attaching
-                                    OTC products to prescription transactions
-                                </li>
-                            </ul>
-                            <p>
-                                The tool helps set realistic targets and
-                                demonstrates how small improvements can compound
-                                into significant revenue increases.
-                            </p>
+                    <h2 class="border-b pb-4 mb-8">Frequently Asked Questions</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4">
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What is this calculator used for?</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>This resource tool helps pharmacy teams visualize and quantify potential sales and profit growth through two key strategies: Basket Size Growth and Script Solutions Conversion.</p>
+                                <ul>
+                                    <li><strong>Basket Size Growth:</strong> Understanding the financial impact of increasing the average transaction value.</li>
+                                    <li><strong>Script Solutions Growth:</strong> Calculating potential revenue from attaching OTC products to prescription transactions.</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >What are "Script Solutions" or "naked
-                                scripts"?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                <strong>Script Solutions</strong> refers to
-                                offering relevant OTC (over-the-counter)
-                                products alongside prescription medications
-                                during the dispensing process.
-                            </p>
-                            <p>
-                                <strong>Naked scripts</strong> are prescription
-                                transactions where the customer purchases only
-                                the prescription medication without any
-                                additional products.
-                            </p>
-                            <p>
-                                By reducing "naked scripts" and increasing
-                                script solutions, pharmacies can:
-                            </p>
-                            <ul>
-                                <li>
-                                    Better serve customer health needs with
-                                    complementary products
-                                </li>
-                                <li>Increase average transaction value</li>
-                                <li>Improve overall store profitability</li>
-                                <li>
-                                    Build stronger customer relationships
-                                    through consultative selling
-                                </li>
-                            </ul>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>What are "Script Solutions"?</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Script Solutions refers to offering relevant OTC products alongside prescriptions. "Naked scripts" are transactions where only a prescription is purchased without additional health solutions.</p>
+                                <p>Reducing naked scripts helps better serve customer health needs and improves store profitability through consultative selling.</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >How do I use the Basket Size Growth
-                                Calculator?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Follow these steps:</p>
-                            <ul>
-                                <li>
-                                    <strong>Step 1:</strong> Enter your current
-                                    weekly transactions, average basket value,
-                                    and current GP%
-                                </li>
-                                <li>
-                                    <strong>Step 2:</strong> Click "Calculate
-                                    Growth Potential" to see scenarios for
-                                    different basket size increases ($1, $1.50,
-                                    $2, etc.)
-                                </li>
-                                <li>
-                                    <strong>Step 3:</strong> Review the weekly,
-                                    monthly, and yearly projections for each
-                                    scenario
-                                </li>
-                                <li>
-                                    <strong>Step 4:</strong> Use the Custom
-                                    Target section to set your own specific
-                                    basket value and GP% goals
-                                </li>
-                            </ul>
-                            <p>
-                                The calculator will automatically update when
-                                you change input values, making it easy to
-                                explore different scenarios.
-                            </p>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do I use the Basket Calculator?</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Enter your current weekly transactions, average basket value, and GP%. Click "Calculate Growth Potential" to see scenarios for increases of $1, $1.50, and more.</p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >How do I use the Script Solutions Growth
-                                Calculator?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>Follow these steps:</p>
-                            <ul>
-                                <li>
-                                    <strong>Step 1:</strong> Enter your weekly
-                                    script transactions. Then enter how many
-                                    currently include additional OTC products
-                                </li>
-                                <li>
-                                    <strong>Step 2:</strong> Input your average
-                                    OTC product value (default is $17) and
-                                    current store GP%. Store GP% is the
-                                    percentage of gross profit generated by the
-                                    store. This value is typically between 20%
-                                    and 40%.
-                                </li>
-                                <li>
-                                    <strong>Step 3:</strong> Click "Calculate
-                                    Growth Scenarios" to see projections for 2%,
-                                    4%, and 6% increases in conversion
-                                </li>
-                                <li>
-                                    <strong>Step 4:</strong> Review detailed
-                                    weekly, monthly, and yearly breakdowns for
-                                    each scenario
-                                </li>
-                                <li>
-                                    <strong>Step 5:</strong> Use the Custom
-                                    Target section to set your own script
-                                    solutions percentage goal
-                                </li>
-                            </ul>
-                            <p>
-                                The calculator shows both the number of
-                                additional transactions needed and the financial
-                                impact.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span>What does "Script Solution %" mean?</span>
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                The Script Solution % is the percentage of
-                                prescription transactions that include an
-                                additional OTC product purchase.
-                            </p>
-                            <p>
-                                <strong>Calculation:</strong> (Transactions with
-                                Script + Other) ÷ (Total Transactions with
-                                Script) × 100
-                            </p>
-                            <p>
-                                <strong>Example:</strong> If you have 1,254
-                                script transactions per week and 470 of those
-                                include an OTC product, your Script Solution %
-                                is 37.5% (470 ÷ 1,254 × 100).
-                            </p>
-                            <p>
-                                Increasing this percentage is a key strategy for
-                                growing pharmacy revenue and better serving
-                                customer needs.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >Where does the $17 average OTC value come
-                                from?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                The $17 default value is based on historical
-                                data and feedback from pharmacy operations
-                                showing the typical average value of OTC
-                                products sold alongside prescriptions.
-                            </p>
-                            <p>
-                                However, you can and should customise this value
-                                to match your store's actual data. If your
-                                average OTC product value is different, simply
-                                change this field to get more accurate
-                                projections for your specific pharmacy.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >What does GP% mean and why is it
-                                important?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                <strong>GP% (Gross Profit Percentage)</strong>
-                                represents the percentage of sales revenue that
-                                remains after subtracting the cost of goods
-                                sold.
-                            </p>
-                            <p><strong>Why it matters:</strong></p>
-                            <ul>
-                                <li>
-                                    It shows your true profitability, not just
-                                    sales volume
-                                </li>
-                                <li>
-                                    Higher GP% means you keep more profit from
-                                    each sale
-                                </li>
-                                <li>
-                                    Different product categories have different
-                                    GP% (First Aid typically has higher margins
-                                    than more competitive departments like
-                                    Vitamins)
-                                </li>
-                                <li>
-                                    Small improvements in GP% can significantly
-                                    impact overall profitability
-                                </li>
-                            </ul>
-                            <p>
-                                The calculator uses your current GP% to estimate
-                                the profit impact of sales increases, giving you
-                                a more complete picture than sales figures
-                                alone.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >Can I use this calculator to track my actual
-                                performance?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                No, this calculator is for forecasting and
-                                goal-setting only.
-                            </p>
-                            <p>Use this calculator to:</p>
-                            <ul>
-                                <li>Set realistic growth targets</li>
-                                <li>
-                                    Understand the potential impact of
-                                    improvements
-                                </li>
-                                <li>Visualise what success might look like</li>
-                                <li>Plan strategies for growth</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span
-                                >What strategies can help me achieve these
-                                growth targets?</span
-                            >
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p><strong>For Basket Size Growth:</strong></p>
-                            <ul>
-                                <li>
-                                    Be diligent in staff training; the need to
-                                    know the products and their benefits to pick
-                                    the right set for customers.
-                                </li>
-                                <li>
-                                    Create prominent displays of complementary
-                                    products
-                                </li>
-                                <li>Offer bundles or value packs</li>
-                                <li>
-                                    Use promotions effectively to drive
-                                    cross-selling opportunities
-                                </li>
-                                <li>
-                                    Keep essentials in stock and visible; 'stock
-                                    sells stock'.
-                                </li>
-                            </ul>
-                            <p><strong>For Script Solutions Growth:</strong></p>
-                            <ul>
-                                <li>
-                                    Train pharmacists, techs and assistants on
-                                    consultative selling by asking questions
-                                    that encourage customers to share their
-                                    health concerns and preferences.
-                                </li>
-                                <li>
-                                    Identify common product pairings (e.g. COQ10
-                                    with Statins).
-                                    <i>
-                                        Reminders can be added with FRED
-                                        Dispense drug notes and/or reminder
-                                        cards in prescription baskets.</i
-                                    >
-                                </li>
-                                <li>
-                                    Display add-on items near the dispensary
-                                    and/or within the dispensary for easy
-                                    access.
-                                </li>
-                                <li>
-                                    Use customer consultation time to discuss
-                                    health needs.
-                                </li>
-                                <li>
-                                    Engage suppliers to offer trainings and
-                                    samples for products.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false">
-                            <span>Who can I contact for help or guidance?</span>
-                            <span class="faq-arrow">▼</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>
-                                If you need support, have questions about using
-                                these forecasting resources, or want guidance on
-                                implementing growth strategies, please contact
-                                your <strong>Add email</strong>.
-                            </p>
-                            <p>They can provide:</p>
-                            <ul>
-                                <li>
-                                    Interpretation of your calculator results
-                                </li>
-                                <li>Specific strategies for your store</li>
-                                <li>Training and support for your team</li>
-                                <li>
-                                    Access to additional resources and tools
-                                </li>
-                                <li>Guidance on realistic goal-setting</li>
-                            </ul>
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>Who can I contact for guidance?</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>For support or guidance on implementing growth strategies, please contact your PharmIQ consultant at support@pharmiq.com.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Disclaimer -->
-            <div class="bg-gray-100 rounded-lg p-4 text-sm text-gray-600">
-                <h3 class="font-bold mb-2">Disclaimer:</h3>
-                <ul class="list-disc pl-5 space-y-1">
-                    <li>
-                        This is a resource tool, not a financial calculator.
-                    </li>
-                    <li>
-                        It is an estimator and cannot be used to track sales or
-                        uplift in sales.
-                    </li>
-                    <li>
-                        Please use this as indicative and contact [insert email
-                        address] if you require support or guidance on using
-                        these forecasting resources.
-                    </li>
+            <footer class="mt-12 p-6 bg-gray-100 rounded-xl border border-border-light">
+                <h4 class="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">Disclaimer & Usage</h4>
+                <ul class="text-xs text-text-secondary space-y-2 list-none p-0">
+                    <li class="flex gap-2"><span>•</span> This is a resource tool for forecasting and goal-setting, not a financial accounting system.</li>
+                    <li class="flex gap-2"><span>•</span> All calculations are indicative estimators based on the inputs provided.</li>
+                    <li class="flex gap-2"><span>•</span> Infrastructure for choice requires professional validation. Contact your PharmIQ consultant for guided implementation.</li>
                 </ul>
-            </div>
+            </footer>
         </div>
         <script src="app.js"></script>
     </body>

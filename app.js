@@ -310,37 +310,28 @@ function calculateScriptGrowth() {
 
   // Validate inputs
   if (!validateInput(weeklyScriptTrans, 1)) {
-    document.getElementById("error-weeklyScriptTrans").textContent =
-      "Please enter valid transactions";
-    weeklyScriptTransInput.setAttribute("aria-invalid", "true");
+    document.getElementById("error-weeklyScriptTrans").textContent = "Please enter valid transactions";
     shakeInput("weeklyScriptTrans");
     return;
   }
   if (!validateInput(scriptPlusOther, 0)) {
-    document.getElementById("error-scriptPlusOther").textContent =
-      "Please enter valid transactions";
-    scriptPlusOtherInput.setAttribute("aria-invalid", "true");
+    document.getElementById("error-scriptPlusOther").textContent = "Please enter valid transactions";
     shakeInput("scriptPlusOther");
     return;
   }
   if (!validateInput(avgOtcValue, 0.01)) {
-    document.getElementById("error-avgOtcValue").textContent =
-      "Please enter valid OTC value";
-    avgOtcValueInput.setAttribute("aria-invalid", "true");
+    document.getElementById("error-avgOtcValue").textContent = "Please enter valid OTC value";
     shakeInput("avgOtcValue");
     return;
   }
   if (!validateInput(scriptGpPercent * 100, 0)) {
-    document.getElementById("error-scriptGpPercent").textContent =
-      "Please enter valid GP percentage";
-    scriptGpPercentInput.setAttribute("aria-invalid", "true");
+    document.getElementById("error-scriptGpPercent").textContent = "Please enter valid GP percentage";
     shakeInput("scriptGpPercent");
     return;
   }
 
   // Calculate current state
-  const currentScriptSolutionPercent =
-    (scriptPlusOther / weeklyScriptTrans) * 100;
+  const currentScriptSolutionPercent = (scriptPlusOther / weeklyScriptTrans) * 100;
 
   // Display current state
   const currentStateTable = document.getElementById("currentStateTable");
@@ -354,39 +345,54 @@ function calculateScriptGrowth() {
                     `;
 
   // Calculate scenarios
+  const summaryTable = document.getElementById("scriptScenarioTable");
+  if (summaryTable) summaryTable.innerHTML = "";
+
   const scenarios = [
-    {
-      increase: 2,
-      weeklyId: "scenario2Weekly",
-      monthlyId: "scenario2Monthly",
-      yearlyId: "scenario2Yearly",
-    },
-    {
-      increase: 4,
-      weeklyId: "scenario4Weekly",
-      monthlyId: "scenario4Monthly",
-      yearlyId: "scenario4Yearly",
-    },
-    {
-      increase: 6,
-      weeklyId: "scenario6Weekly",
-      monthlyId: "scenario6Monthly",
-      yearlyId: "scenario6Yearly",
-    },
+    { increase: 2, id: "2" },
+    { increase: 4, id: "4" },
+    { increase: 6, id: "6" }
   ];
 
   scenarios.forEach((scenario) => {
-    calculateScenario(
+    const results = calculateScenarioData(
       weeklyScriptTrans,
       scriptPlusOther,
       currentScriptSolutionPercent,
       scenario.increase,
       avgOtcValue,
-      scriptGpPercent,
-      scenario.weeklyId,
-      scenario.monthlyId,
-      scenario.yearlyId,
+      scriptGpPercent
     );
+
+    // Update the mini-table in the scenario card
+    const miniTable = document.getElementById(`scenario${scenario.id}Weekly`);
+    if (miniTable) {
+        miniTable.innerHTML = `
+            <div class="space-y-1 text-sm">
+                <div class="flex justify-between"><span class="text-gray-500">Target Trans:</span> <span class="font-semibold">${formatNumber(results.weekly.proposedTrans)}</span></div>
+                <div class="flex justify-between"><span class="text-gray-500">Weekly Sales:</span> <span class="font-semibold text-teal-700">${formatCurrency(results.weekly.incrementalSales)}</span></div>
+            </div>
+        `;
+    }
+
+    // Update the impact span
+    const impactSpan = document.getElementById(`yearlyProfit${scenario.id}`);
+    if (impactSpan) {
+        impactSpan.textContent = formatCurrency(results.yearly.incrementalProfit);
+        flashValue(impactSpan);
+    }
+
+    // Add to summary table if it exists
+    if (summaryTable) {
+        const row = summaryTable.insertRow();
+        row.innerHTML = `
+            <td class="font-medium">+${scenario.increase}%</td>
+            <td class="number">${formatPercent(results.proposedPercent)}</td>
+            <td class="number">${formatCurrency(results.weekly.incrementalSales)}</td>
+            <td class="number">${formatCurrency(results.monthly.incrementalProfit)}</td>
+            <td class="number font-bold text-teal-700">${formatCurrency(results.yearly.incrementalProfit)}</td>
+        `;
+    }
   });
 
   // Update note
@@ -394,178 +400,83 @@ function calculateScriptGrowth() {
 
   const firstScriptReveal = revealResults("scriptResults");
   if (firstScriptReveal) {
-    document
-      .getElementById("scriptResults")
-      .scrollIntoView({ behavior: "smooth" });
+    document.getElementById("scriptResults").scrollIntoView({ behavior: "smooth" });
+    if (summaryTable) staggerRows(summaryTable);
   }
 }
 
-function calculateScenario(
+function calculateScenarioData(
   weeklyScriptTrans,
   currentScriptPlusOther,
   currentPercent,
   increasePercent,
   avgOtcValue,
-  gpPercent,
-  weeklyId,
-  monthlyId,
-  yearlyId,
+  gpPercent
 ) {
   const proposedPercent = currentPercent + increasePercent;
 
-  // Weekly calculations
-  const weeklyProposedTrans = Math.round(
-    weeklyScriptTrans * (proposedPercent / 100),
-  );
-  const weeklyAdditionalTrans = weeklyProposedTrans - currentScriptPlusOther;
-  const weeklyIncrementalSales = weeklyAdditionalTrans * avgOtcValue;
-  const weeklyIncrementalProfit = weeklyIncrementalSales * gpPercent;
+  function getPeriodData(multiplier) {
+    const periodScriptTrans = weeklyScriptTrans * multiplier;
+    const proposedTrans = Math.round(periodScriptTrans * (proposedPercent / 100));
+    const currentTrans = currentScriptPlusOther * multiplier;
+    const additionalTrans = proposedTrans - currentTrans;
+    const incrementalSales = additionalTrans * avgOtcValue;
+    const incrementalProfit = incrementalSales * gpPercent;
+    return { proposedTrans, incrementalSales, incrementalProfit };
+  }
 
-  // Monthly calculations (4 weeks)
-  const monthlyScriptTrans = weeklyScriptTrans * 4;
-  const monthlyProposedTrans = Math.round(
-    monthlyScriptTrans * (proposedPercent / 100),
-  );
-  const monthlyCurrentTrans = currentScriptPlusOther * 4;
-  const monthlyAdditionalTrans = monthlyProposedTrans - monthlyCurrentTrans;
-  const monthlyIncrementalSales = monthlyAdditionalTrans * avgOtcValue;
-  const monthlyIncrementalProfit = monthlyIncrementalSales * gpPercent;
-
-  // Yearly calculations (52 weeks)
-  const yearlyScriptTrans = weeklyScriptTrans * 52;
-  const yearlyProposedTrans = Math.round(
-    yearlyScriptTrans * (proposedPercent / 100),
-  );
-  const yearlyCurrentTrans = currentScriptPlusOther * 52;
-  const yearlyAdditionalTrans = yearlyProposedTrans - yearlyCurrentTrans;
-  const yearlyIncrementalSales = yearlyAdditionalTrans * avgOtcValue;
-  const yearlyIncrementalProfit = yearlyIncrementalSales * gpPercent;
-
-  // Populate weekly table
-  const weeklyTable = document.getElementById(weeklyId);
-  weeklyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(weeklyScriptTrans)}</td>
-                            <td class="number">${formatNumber(weeklyProposedTrans)}</td>
-                            <td class="number">${formatPercent(proposedPercent)}</td>
-                            <td class="number">${formatCurrency(weeklyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(weeklyIncrementalProfit)}</td>
-                        </tr>
-                    `;
-
-  // Populate monthly table
-  const monthlyTable = document.getElementById(monthlyId);
-  monthlyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(monthlyScriptTrans)}</td>
-                            <td class="number">${formatNumber(monthlyProposedTrans)}</td>
-                            <td class="number">${formatPercent(proposedPercent)}</td>
-                            <td class="number">${formatCurrency(monthlyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(monthlyIncrementalProfit)}</td>
-                        </tr>
-                    `;
-
-  // Populate yearly table
-  const yearlyTable = document.getElementById(yearlyId);
-  yearlyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(yearlyScriptTrans)}</td>
-                            <td class="number">${formatNumber(yearlyProposedTrans)}</td>
-                            <td class="number">${formatPercent(proposedPercent)}</td>
-                            <td class="number">${formatCurrency(yearlyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(yearlyIncrementalProfit)}</td>
-                        </tr>
-                    `;
+  return {
+    proposedPercent,
+    weekly: getPeriodData(1),
+    monthly: getPeriodData(4),
+    yearly: getPeriodData(52)
+  };
 }
 
 function calculateCustomScript() {
-  const weeklyScriptTrans = parseFloat(
-    document.getElementById("weeklyScriptTrans").value,
-  );
-  const scriptPlusOther = parseFloat(
-    document.getElementById("scriptPlusOther").value,
-  );
+  const weeklyScriptTrans = parseFloat(document.getElementById("weeklyScriptTrans").value);
+  const scriptPlusOther = parseFloat(document.getElementById("scriptPlusOther").value);
   const avgOtcValue = parseFloat(document.getElementById("avgOtcValue").value);
-  const scriptGpPercent =
-    parseFloat(document.getElementById("scriptGpPercent").value) / 100;
-  const targetPercent = parseFloat(
-    document.getElementById("targetScriptPercent").value,
-  );
+  const scriptGpPercent = parseFloat(document.getElementById("scriptGpPercent").value) / 100;
+  const targetPercent = parseFloat(document.getElementById("targetScriptPercent").value);
 
   if (!validateInput(targetPercent, 0)) {
     alert("Please enter a valid target percentage");
     return;
   }
+
+  const currentPercent = (scriptPlusOther / weeklyScriptTrans) * 100;
+  const absoluteTargetIncrease = targetPercent - currentPercent;
   
-
-  // Weekly calculations
-  const weeklyProposedTrans = Math.round(
-    weeklyScriptTrans * (targetPercent / 100),
+  const finalResults = calculateScenarioData(
+    weeklyScriptTrans,
+    scriptPlusOther,
+    currentPercent,
+    absoluteTargetIncrease,
+    avgOtcValue,
+    scriptGpPercent
   );
-  const weeklyAdditionalTrans = weeklyProposedTrans - scriptPlusOther;
-  const weeklyIncrementalSales = weeklyAdditionalTrans * avgOtcValue;
-  const weeklyIncrementalProfit = weeklyIncrementalSales * scriptGpPercent;
 
-  // Monthly calculations (4 weeks)
-  const monthlyScriptTrans = weeklyScriptTrans * 4;
-  const monthlyProposedTrans = Math.round(
-    monthlyScriptTrans * (targetPercent / 100),
-  );
-  const monthlyCurrentTrans = scriptPlusOther * 4;
-  const monthlyAdditionalTrans = monthlyProposedTrans - monthlyCurrentTrans;
-  const monthlyIncrementalSales = monthlyAdditionalTrans * avgOtcValue;
-  const monthlyIncrementalProfit = monthlyIncrementalSales * scriptGpPercent;
+  const tbody = document.getElementById("customScriptTable");
+  tbody.innerHTML = "";
 
-  // Yearly calculations (52 weeks)
-  const yearlyScriptTrans = weeklyScriptTrans * 52;
-  const yearlyProposedTrans = Math.round(
-    yearlyScriptTrans * (targetPercent / 100),
-  );
-  const yearlyCurrentTrans = scriptPlusOther * 52;
-  const yearlyAdditionalTrans = yearlyProposedTrans - yearlyCurrentTrans;
-  const yearlyIncrementalSales = yearlyAdditionalTrans * avgOtcValue;
-  const yearlyIncrementalProfit = yearlyIncrementalSales * scriptGpPercent;
+  const periods = [
+    { name: "Weekly", data: finalResults.weekly },
+    { name: "Monthly (4 weeks)", data: finalResults.monthly },
+    { name: "Yearly (52 weeks)", data: finalResults.yearly },
+  ];
 
-  // Populate weekly custom table
-  const weeklyTable = document.getElementById("customWeeklyTable");
-  weeklyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(weeklyScriptTrans)}</td>
-                            <td class="number">${formatNumber(weeklyProposedTrans)}</td>
-                            <td class="number">${formatPercent(targetPercent)}</td>
-                            <td class="number">${formatCurrency(weeklyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(weeklyIncrementalProfit)}</td>
-                        </tr>
-                    `;
-
-  // Populate monthly custom table
-  const monthlyTable = document.getElementById("customMonthlyTable");
-  monthlyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(monthlyScriptTrans)}</td>
-                            <td class="number">${formatNumber(monthlyProposedTrans)}</td>
-                            <td class="number">${formatPercent(targetPercent)}</td>
-                            <td class="number">${formatCurrency(monthlyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(monthlyIncrementalProfit)}</td>
-                        </tr>
-                    `;
-
-  // Populate yearly custom table
-  const yearlyTable = document.getElementById("customYearlyTable");
-  yearlyTable.innerHTML = `
-                        <tr>
-                            <td class="number">${formatNumber(yearlyScriptTrans)}</td>
-                            <td class="number">${formatNumber(yearlyProposedTrans)}</td>
-                            <td class="number">${formatPercent(targetPercent)}</td>
-                            <td class="number">${formatCurrency(yearlyIncrementalSales)}</td>
-                            <td class="number">${formatCurrency(yearlyIncrementalProfit)}</td>
-                        </tr>
-                    `;
+  periods.forEach((p) => {
+    const row = tbody.insertRow();
+    row.innerHTML = `
+        <td class="font-medium">${p.name}</td>
+        <td class="number">${formatCurrency(p.data.incrementalSales)}</td>
+        <td class="number font-bold text-teal-700">${formatCurrency(p.data.incrementalProfit)}</td>
+    `;
+  });
 
   revealResults("customScriptResults");
-  document
-    .getElementById("customScriptResults")
-    .scrollIntoView({ behavior: "smooth" });
+  staggerRows(tbody);
 }
 
 // Auto-calculate on input change for basket calculator
