@@ -305,7 +305,7 @@ body {
 
 .tab-content { display: none; }
 .tab-content.active {
-  display: block;
+  display: block !important;
   animation: fadeSlideUp 260ms var(--ease-out-quart) 80ms both;
 }
 

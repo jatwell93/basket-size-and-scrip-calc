@@ -1,4 +1,5 @@
 // ── Animation helpers ────────────────────────────────────────────
+console.log('[SCRIPT] app.js is loading');
 
 // Count up a numeric value displayed via a formatter function
 function animateValue(el, target, formatter) {
@@ -56,19 +57,32 @@ function shakeInput(id) {
 
 // Tab switching
 function switchTab(tab) {
+  console.log('[DEBUG] switchTab called with:', tab);
+  
   // Get all tabs and buttons
   const tabs = {
     basket: document.getElementById("basket-tab"),
     script: document.getElementById("script-tab"),
     faq: document.getElementById("faq-tab"),
   };
+  
+  console.log('[DEBUG] Found tabs:', {
+    basket: !!tabs.basket,
+    script: !!tabs.script,
+    faq: !!tabs.faq
+  });
+  
   const buttons = document.querySelectorAll(".tab-button");
+  console.log('[DEBUG] Found buttons:', buttons.length);
 
   // Hide all tabs and deactivate all buttons
   Object.keys(tabs).forEach((key) => {
     const tabEl = tabs[key];
-    if (tabEl) tabEl.classList.remove("active");
-    
+    if (tabEl) {
+      console.log('[DEBUG] Removing active from tab:', key, 'current classes:', tabEl.className);
+      tabEl.classList.remove("active");
+    }
+
     // Update ARIA on corresponding button
     const btn = Array.from(buttons).find(b => b.dataset.tab === key);
     if (btn) {
@@ -79,12 +93,17 @@ function switchTab(tab) {
 
   // Show selected tab and activate corresponding button
   if (tabs[tab]) {
+    console.log('[DEBUG] Adding active to tab:', tab, 'current classes before:', tabs[tab].className);
     tabs[tab].classList.add("active");
+    console.log('[DEBUG] Classes after:', tabs[tab].className);
+    
     const activeBtn = Array.from(buttons).find(b => b.dataset.tab === tab);
     if (activeBtn) {
       activeBtn.classList.add("active");
       activeBtn.setAttribute("aria-selected", "true");
     }
+  } else {
+    console.error('[DEBUG] Tab not found:', tab);
   }
 }
 
@@ -503,6 +522,8 @@ function calculateCustomScript() {
 
 // Expose functions to window (fallback) and attach event listeners
 if (typeof window !== "undefined") {
+  console.log('[DEBUG] Window available, setting up event listeners');
+  
   // Fallback global references (keeps backwards compatibility)
   window.switchTab = switchTab;
   window.toggleFaq = toggleFaq;
@@ -512,23 +533,44 @@ if (typeof window !== "undefined") {
   window.calculateCustomScript = calculateCustomScript;
 
   // Tab buttons (use data-tab attribute)
-  document.querySelectorAll('.tab-button[data-tab]').forEach((btn) => {
-    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  const tabButtons = document.querySelectorAll('.tab-button[data-tab]');
+  console.log('[DEBUG] Found tab buttons:', tabButtons.length);
+  tabButtons.forEach((btn) => {
+    console.log('[DEBUG] Attaching click listener to button:', btn.dataset.tab, btn.id);
+    btn.addEventListener('click', () => {
+      console.log('[DEBUG] Button clicked:', btn.dataset.tab);
+      switchTab(btn.dataset.tab);
+    });
   });
 
   // Calculator buttons
-  document.getElementById('btnCalculateBasket')?.addEventListener('click', calculateBasketGrowth);
-  document.getElementById('btnCalculateCustomBasket')?.addEventListener('click', calculateCustomBasket);
-  document.getElementById('btnCalculateScript')?.addEventListener('click', calculateScriptGrowth);
-  document.getElementById('btnCalculateCustomScript')?.addEventListener('click', calculateCustomScript);
+  const basketBtn = document.getElementById('btnCalculateBasket');
+  console.log('[DEBUG] btnCalculateBasket:', !!basketBtn);
+  basketBtn?.addEventListener('click', calculateBasketGrowth);
+  
+  const customBasketBtn = document.getElementById('btnCalculateCustomBasket');
+  console.log('[DEBUG] btnCalculateCustomBasket:', !!customBasketBtn);
+  customBasketBtn?.addEventListener('click', calculateCustomBasket);
+  
+  const scriptBtn = document.getElementById('btnCalculateScript');
+  console.log('[DEBUG] btnCalculateScript:', !!scriptBtn);
+  scriptBtn?.addEventListener('click', calculateScriptGrowth);
+  
+  const customScriptBtn = document.getElementById('btnCalculateCustomScript');
+  console.log('[DEBUG] btnCalculateCustomScript:', !!customScriptBtn);
+  customScriptBtn?.addEventListener('click', calculateCustomScript);
 
   // FAQ accordion: attach by index order
-  document.querySelectorAll('.faq-question').forEach((q, i) => {
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  console.log('[DEBUG] Found FAQ questions:', faqQuestions.length);
+  faqQuestions.forEach((q, i) => {
+    console.log('[DEBUG] Attaching FAQ listener to question', i);
     q.addEventListener('click', () => toggleFaq(i));
   });
 
   // Theme toggle
   const themeToggle = document.getElementById('theme-toggle');
+  console.log('[DEBUG] theme-toggle:', !!themeToggle);
   const savedTheme = localStorage.getItem('pharmiq-theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
@@ -538,4 +580,6 @@ if (typeof window !== "undefined") {
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('pharmiq-theme', newTheme);
   });
+  
+  console.log('[DEBUG] Event listener setup complete');
 }
