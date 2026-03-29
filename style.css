@@ -104,6 +104,8 @@
 .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
 .gap-4 { gap: 1rem; }
 .gap-6 { gap: 1.5rem; }
+.gap-x-8 { column-gap: 2rem; }
+.gap-y-4 { row-gap: 1rem; }
 .block { display: block; }
 .inline-flex { display: inline-flex; }
 .flex-wrap { flex-wrap: wrap; }
@@ -132,6 +134,10 @@
   .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 /* ── Global Reset & Base ──────────────────────────────────────── */
@@ -468,11 +474,70 @@ body {
   transition: all 200ms ease;
 }
 
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  transition: all 150ms ease;
+}
+
 .faq-question:hover { background: var(--color-brand-teal-50); }
 
 .faq-question.active {
   background: var(--color-brand-teal-50);
   color: var(--color-brand-teal);
+}
+
+.faq-arrow {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  transition: transform 200ms ease;
+}
+
+.faq-question.active .faq-arrow {
+  transform: rotate(180deg);
+  color: var(--color-brand-teal);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 200ms ease;
+}
+
+.faq-answer.active {
+  max-height: 500px;
+}
+
+.faq-answer {
+  padding: 0 1.25rem 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.faq-answer p {
+  margin: 0.5rem 0;
+}
+
+.faq-answer ul {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.faq-answer li {
+  margin: 0.25rem 0;
 }
 
 /* ── RESPONSIVE & UTILS ────────────────────────────────────────── */

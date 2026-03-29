@@ -96,27 +96,26 @@ function toggleFaq(index) {
   const isActive = question.classList.contains("active");
 
   if (isActive) {
-    // Collapse: lock height then animate to 0
-    answer.style.height = answer.scrollHeight + "px";
+    // Collapse: animate max-height to 0
+    answer.style.maxHeight = answer.scrollHeight + "px";
     answer.offsetHeight; // force reflow
-    answer.style.height = "0px";
+    answer.style.maxHeight = "0px";
     question.classList.remove("active");
     question.setAttribute("aria-expanded", "false");
     answer.addEventListener("transitionend", function handler() {
-      answer.classList.remove("active");
+      answer.style.maxHeight = ""; // clear inline style
       answer.removeEventListener("transitionend", handler);
     }, { once: true });
   } else {
     // Expand: measure target height then animate from 0
-    answer.classList.add("active");
-    const targetH = answer.scrollHeight + "px";
-    answer.style.height = "0px";
-    answer.offsetHeight; // force reflow
-    answer.style.height = targetH;
     question.classList.add("active");
     question.setAttribute("aria-expanded", "true");
+    const targetH = answer.scrollHeight + "px";
+    answer.style.maxHeight = "0px";
+    answer.offsetHeight; // force reflow
+    answer.style.maxHeight = targetH;
     answer.addEventListener("transitionend", function handler() {
-      answer.style.height = "auto"; // allow natural resize after animation
+      answer.style.maxHeight = ""; // allow natural resize after animation
       answer.removeEventListener("transitionend", handler);
     }, { once: true });
   }
