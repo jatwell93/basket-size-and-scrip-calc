@@ -125,6 +125,8 @@
 .rounded-lg { border-radius: var(--radius-lg); }
 .overflow-x-auto { overflow-x: auto; }
 .list-disc { list-style-type: disc; }
+.list-none { list-style-type: none; }
+.pl-0 { padding-left: 0; }
 .pl-5 { padding-left: 1.25rem; }
 .space-y-1 > * + * { margin-top: 0.25rem; }
 .bg-gray-100 { background-color: var(--color-surface); }

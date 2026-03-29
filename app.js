@@ -120,23 +120,29 @@ function toggleFaq(index) {
     answer.offsetHeight; // force reflow
     answer.style.maxHeight = "0px";
     question.classList.remove("active");
+    answer.classList.remove("active");
     question.setAttribute("aria-expanded", "false");
-    answer.addEventListener("transitionend", function handler() {
+    
+    const onCollapsed = function() {
       answer.style.maxHeight = ""; // clear inline style
-      answer.removeEventListener("transitionend", handler);
-    }, { once: true });
+      answer.removeEventListener("transitionend", onCollapsed);
+    };
+    answer.addEventListener("transitionend", onCollapsed);
   } else {
     // Expand: measure target height then animate from 0
     question.classList.add("active");
+    answer.classList.add("active");
     question.setAttribute("aria-expanded", "true");
     const targetH = answer.scrollHeight + "px";
     answer.style.maxHeight = "0px";
     answer.offsetHeight; // force reflow
     answer.style.maxHeight = targetH;
-    answer.addEventListener("transitionend", function handler() {
-      answer.style.maxHeight = ""; // allow natural resize after animation
-      answer.removeEventListener("transitionend", handler);
-    }, { once: true });
+    
+    const onExpanded = function() {
+      answer.style.maxHeight = "none"; // allow natural resize after animation
+      answer.removeEventListener("transitionend", onExpanded);
+    };
+    answer.addEventListener("transitionend", onExpanded);
   }
 }
 

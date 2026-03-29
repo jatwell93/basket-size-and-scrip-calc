@@ -51,8 +51,7 @@
                         role="tab"
                         aria-selected="true"
                         aria-controls="basket-tab"
-                        id="tab-basket"
-                        onclick="switchTab('basket')">
+                        id="tab-basket">
                     Basket Size Growth
                 </button>
                 <button class="tab-button"
@@ -60,8 +59,7 @@
                         role="tab"
                         aria-selected="false"
                         aria-controls="script-tab"
-                        id="tab-script"
-                        onclick="switchTab('script')">
+                        id="tab-script">
                     Script Solutions Growth
                 </button>
                 <button class="tab-button"
@@ -69,8 +67,7 @@
                         role="tab"
                         aria-selected="false"
                         aria-controls="faq-tab"
-                        id="tab-faq"
-                        onclick="switchTab('faq')">
+                        id="tab-faq">
                     FAQ
                 </button>
             </div>
@@ -448,10 +445,10 @@
                                 <span class="faq-arrow">▼</span>
                             </button>
                             <div class="faq-answer">
-                                <p>This resource tool helps pharmacy teams visualize and quantify potential sales and profit growth through two key strategies: Basket Size Growth and Script Solutions Conversion.</p>
-                                <ul>
-                                    <li><strong>Basket Size Growth:</strong> Understanding the financial impact of increasing the average transaction value.</li>
-                                    <li><strong>Script Solutions Growth:</strong> Calculating potential revenue from attaching OTC products to prescription transactions.</li>
+                                <p>This resource tool helps pharmacy teams visualize and quantify potential sales and profit growth through two key strategies:</p>
+                                <ul class="list-none p-0 space-y-1">
+                                    <li class="flex gap-2"><span>•</span> <strong>Basket Size Growth:</strong> Understanding the financial impact of increasing the average transaction value.</li>
+                                    <li class="flex gap-2"><span>•</span> <strong>Script Solutions Growth:</strong> Calculating potential revenue from attaching OTC products to prescription transactions.</li>
                                 </ul>
                             </div>
                         </div>
@@ -462,8 +459,36 @@
                                 <span class="faq-arrow">▼</span>
                             </button>
                             <div class="faq-answer">
-                                <p>Script Solutions refers to offering relevant OTC products alongside prescriptions. "Naked scripts" are transactions where only a prescription is purchased without additional health solutions.</p>
-                                <p>Reducing naked scripts helps better serve customer health needs and improves store profitability through consultative selling.</p>
+                                <p>Script Solutions (or Script Solution Conversion) refers to the practice of offering relevant OTC products alongside prescriptions to better serve patient health needs.</p>
+                                <p><strong>Script Only Sales (AKA Naked Scripts)</strong> are defined as transactions where one or more prescription products have sold without a retail product.</p>
+                                <p>To calculate the SOS percentage in your store, use the formula:</p>
+                                <p class="bg-gray-100 p-3 rounded font-mono text-center my-3">Script Only / (Script Only + Scripts & Retail)</p>
+                                <ul class="list-none p-0 space-y-1">
+                                    <li class="flex gap-2"><span>•</span> Transactions containing retail-only products are not used in the formula.</li>
+                                    <li class="flex gap-2"><span>•</span> A transaction containing multiple scripts only counts once, as it represents a single opportunity to upsell.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-question" aria-expanded="false">
+                                <span>How do we implement this dispensary workflow?</span>
+                                <span class="faq-arrow">▼</span>
+                            </button>
+                            <div class="faq-answer">
+                                <p>Effective implementation requires "buy-in" from the whole team. Organise a team meeting to discuss:</p>
+                                <ul class="list-none p-0 space-y-1 mb-4">
+                                    <li class="flex gap-2"><span>•</span> <strong>Purpose:</strong> What does a script solution mean for the patient and the business?</li>
+                                    <li class="flex gap-2"><span>•</span> <strong>Process:</strong> How will your team implement the workflow?</li>
+                                    <li class="flex gap-2"><span>•</span> <strong>Questions:</strong> What specific questions will you ask the patient?</li>
+                                    <li class="flex gap-2"><span>•</span> <strong>Responsibility:</strong> Who is responsible for each step of the process?</li>
+                                </ul>
+                                <p><strong>Dispensary Tips:</strong></p>
+                                <ul class="list-none p-0 space-y-1">
+                                    <li class="flex gap-2"><span>•</span> Pay attention to verbal and non-verbal cues for customer comfort.</li>
+                                    <li class="flex gap-2"><span>•</span> Swap medical jargon for simple, accessible words.</li>
+                                    <li class="flex gap-2"><span>•</span> Use visual learning by showing the patient the product(s) you are recommending.</li>
+                                </ul>
                             </div>
                         </div>
 
